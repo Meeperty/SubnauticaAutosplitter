@@ -13,7 +13,6 @@ startup
 	//survival splits
 	settings.Add("sparseEndSplit", true, "Split on Sparse Reef deathwarp", "survivalSplits");
 	settings.Add("mountainClipSplit", true, "Split on the mushroom forest clip after mountain setup", "survivalSplits");
-	settings.Add("cureSplit", false,"Split on end of the cure anim","survivalSplits");
 	settings.Add("auroraSplit", false, "Split on dying in the aurora to get back", "survivalSplits");
 
 	//creative settings parent
@@ -22,6 +21,7 @@ startup
 
 	//general settings
 	settings.Add("endSplit", true, "Split on rocket launch");
+	settings.Add("cureSplit", true, "Split on end of the cure anim");
 
 	vars.hasMountainClipped = false;
 	vars.hasCured = false;
