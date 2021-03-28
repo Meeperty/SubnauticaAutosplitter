@@ -18,6 +18,7 @@ startup
 	//creative settings parent
 	settings.Add("creativeSplits", false, "Creative");
 	//creative settings
+	settings.Add("fallSplit", false, "Split on beginning the fall", "creativeSplits");
 
 	//general settings
 	settings.Add("endSplit", true, "Split on rocket launch");
@@ -28,13 +29,14 @@ startup
 	vars.hasSparseDeathwarped = false;
 	vars.hasEnded = false;
 	vars.hasAuroraDeathwarped = false;
+	vars.hasFallen = false;
 }
 
 update
 {
 	//print(String.Format("biome is: {0}", current.biome));
 
-	print(current.biomeString);
+	//print(current.biomeString);
 
 	//print(current.infectedAmount.ToString());
 
@@ -57,4 +59,9 @@ split
 
 	//split on leaving aurora
 	if (old.biomeString == "crashedShip" && current.biomeString == "safeShallows" && settings["auroraSplit"] && !vars.hasAuroraDeathwarped) {vars.hasAuroraDeathwarped = true; return true;}
+
+	//split on beginning the fall (creative)
+	if (current.biomeString == "safeShallows" && current.depth < -60f && vars.hasFallen == false) {vars.hasFallen = true; return true;}
+
+
 }
