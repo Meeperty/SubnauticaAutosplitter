@@ -61,7 +61,7 @@ split
 	if (old.biomeString == "crashedShip" && current.biomeString == "safeShallows" && settings["auroraSplit"] && !vars.hasAuroraDeathwarped) {vars.hasAuroraDeathwarped = true; return true;}
 
 	//split on beginning the fall (creative)
-	if (current.biomeString == "safeShallows" && current.depth < -60f && vars.hasFallen == false) {vars.hasFallen = true; return true;}
+	if (current.biomeString == "safeShallows" && current.depth < -60f && settings["fallSplit"] &&vars.hasFallen == false) {vars.hasFallen = true; return true;}
 
 
 }
