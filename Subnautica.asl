@@ -14,6 +14,7 @@ startup
 	settings.Add("sparseEndSplit", true, "Split on Sparse Reef deathwarp", "survivalSplits");
 	settings.Add("mountainClipSplit", true, "Split on the mushroom forest clip after mountain setup", "survivalSplits");
 	settings.Add("cureSplit", false,"Split on end of the cure anim","survivalSplits");
+	settings.Add("auroraSplit", false, "Split on dying in the aurora to get back", "survivalSplits");
 
 	//creative settings parent
 	settings.Add("creativeSplits", false, "Creative");
@@ -26,17 +27,18 @@ startup
 	vars.hasCured = false;
 	vars.hasSparseDeathwarped = false;
 	vars.hasEnded = false;
+	vars.hasAuroraDeathwarped = false;
 }
 
 update
 {
 	//print(String.Format("biome is: {0}", current.biome));
 
-	//print(current.biomeString);
+	print(current.biomeString);
 
 	//print(current.infectedAmount.ToString());
 
-	print(current.depth.ToString());
+	//print(current.depth.ToString());
 }
 
 split
@@ -52,4 +54,7 @@ split
 
 	//split on cure
 	if(old.infectedAmount > 0f && current.infectedAmount == 0f && settings["cureSplit"] && !vars.hasCured) {vars.hasCured = true; return true;}
+
+	//split on leaving aurora
+	if (old.biomeString == "crashedShip" && current.biomeString == "safeShallows" && settings["auroraSplit"] && !vars.hasAuroraDeathwarped) {vars.hasAuroraDeathwarped = true; return true;}
 }
