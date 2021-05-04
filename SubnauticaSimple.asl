@@ -7,10 +7,21 @@ startup
 {
 	//general settings
 	settings.Add("endSplit", true, "Split on rocket launch");
+
+	//vars
+	vars.hasEnded = 0;
+
+	//thingy
+	vars.TimerReset = (LiveSplit.Model.Input.EventHandlerT<TimerPhase>) ((s, e) =>
+    {
+		vars.hasEnded = 15;
+        print(vars.HasEnded.ToString());
+    };
+    timer.OnReset += vars.TimerReset;
 }
 
 split
 {
 	//split on rocket launch
-	if(current.rocketLaunching != old.rocketLaunching && settings["endSplit"] && !vars.hasEnded) {vars.hasEnded = true; return true;}
+	if(current.rocketLaunching != old.rocketLaunching && settings["endSplit"] && !vars.hasEnded) {vars.hasEnded = true; return true; print("game end");}
 }
