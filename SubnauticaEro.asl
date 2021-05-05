@@ -80,3 +80,8 @@ update
 	vars.UpdateScenes();
 	vars.LaunchStarted.Update(game);
 }
+
+split
+{
+    return vars.LaunchStarted.Changed && vars.LaunchStarted.Current;
+}
