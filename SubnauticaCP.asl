@@ -1,28 +1,6 @@
 // This auto splitter was generated using Ero's 'Unity ASL Generator'.
 // More infos here: https://github.com/just-ero/Unity-ASL-Generator.
 
-state("Subnautica") {}
-
-startup
-{
-	// var SplitScenes = new HashSet<string>
-	// {
-	// 	"StartScreen",
-	// 	"XMenu",
-	// 	"Cleaner",
-	// 	"Main",
-	// 	"EscapePod",
-	// 	"Aurora",
-	// 	"Cyclops",
-	// 	"MenuEnvironment",
-	// 	"Essentials",
-	// 	"EmptyScene",
-	// 	"RocketSpace",
-	// 	"EndCredits",
-	// 	"EndCreditsSceneCleaner"
-	// };
-}
-
 init
 {
 	var UnityPlayer = modules.Single(m => m.ModuleName == "UnityPlayer.dll");
