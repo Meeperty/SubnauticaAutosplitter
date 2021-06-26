@@ -1,6 +1,11 @@
 state("Subnautica") 
 {
-	bool rocketLaunching: "Subnautica.exe", 0x014BBD60, 0x3F8, 0x910, 0x10, 0x148, 0x190, 0x38, 0x1B4; 
+	bool rocketLaunching: "Subnautica.exe", 0x014BBD60, 0x2D8, 0x328, 0x920, 0x54, 0x148, 0x0, 0x80; 
+}
+
+update
+{
+	print("rocketLaunching is" + current.rocketLaunching);
 }
 
 split
