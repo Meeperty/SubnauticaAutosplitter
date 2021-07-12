@@ -1,4 +1,4 @@
-state("Subnautica") 
+state("Subnautica")
 {
 	bool rocketLaunching: "mono.dll", 0x0027EAD8, 0x40, 0x70, 0x50, 0x90, 0x30, 0x8, 0x80; 
 	bool escapePodIntroCinematicModeActive: "mono.dll", 0x262110, 0x210, 0xc0, 0x28, 0xf0, 0x28, 0x86;
@@ -16,5 +16,5 @@ start
 
 split
 {
-	if(!old.rocketLaunching && current.rocketLaunching) { return true; }
+	if (!old.rocketLaunching && current.rocketLaunching) { return true; }
 }
