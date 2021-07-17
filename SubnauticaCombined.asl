@@ -9,18 +9,24 @@ state("Subnautica")
 startup
 {
     //settings.Add(id (string), default_value (bool), description (string), parent (string))
-    settings.Add("April '21 Patch", false, "I'm playing on April 2021 patch");
-    settings.Add("Sept '18 Patch", true, "I'm playing on September 2018 patch");
+    settings.Add("april 21", false, "I'm playing on current patch");
+    settings.Add("start 21", true, "Split on start", "april 21");
+    settings.Add("end 21", true, "Split on rocket launch", "april 21");
+
+    settings.Add("sept 18", true, "I'm playing on September 2018 patch");
+    settings.Add("start 18", true, "Split on start", "sept 18");
+    settings.Add("end 18", true, "Split on rocket launch", "sept 18");
+
 }
 
 split
 {
-    if (!old.rocketLaunchingCP && current.rocketLaunchingCP && settings["April '21 Patch"]) { return true; }
-    if (!old.rocketLaunching && current.rocketLaunching && settings["Sept '18 Patch"]) { return true; }
+    if (!old.rocketLaunchingCP && current.rocketLaunchingCP && settings["end 21"]) { return true; }
+    if (!old.rocketLaunching && current.rocketLaunching && settings["end 18"]) { return true; }
 }
 
 start
 {
-    if (old.introCinematicActiveCP && !current.introCinematicActiveCP && settings["April '21 Patch"]) { return true; }
-    if (old.introCinematicActive && !current.introCinematicActive && settings["Sept '18 Patch"]) { return true; }
+    if (old.introCinematicActiveCP && !current.introCinematicActiveCP && settings["start 21"]) { return true; }
+    if (old.introCinematicActive && !current.introCinematicActive && settings["end 18"]) { return true; }
 }
