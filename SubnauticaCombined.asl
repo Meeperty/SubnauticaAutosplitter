@@ -13,12 +13,6 @@ startup
     settings.Add("Sept '18 Patch", true, "I'm playing on September 2018 patch");
 }
 
-update
-{
-    print("introCinematicActiveCP is " + current.introCinematicActiveCP);
-    print("rocketLaunchingCP is " + current.rocketLaunchingCP);
-}
-
 split
 {
     if (!old.rocketLaunchingCP && current.rocketLaunchingCP && settings["April '21 Patch"]) { return true; }
