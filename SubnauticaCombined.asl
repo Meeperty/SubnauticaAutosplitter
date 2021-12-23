@@ -8,7 +8,7 @@ state("Subnautica", "September 2018")
     string128 biomeString: "Subnautica.exe", 0x142b908, 0x180, 0x128, 0x80, 0x1d0, 0x8, 0x248, 0x1d0, 0x14;
 }
 
-state("Subnautica", "April 2021")
+state("Subnautica", "December 2021")
 {
     //player is "UnityPlayer.dll", 0x1690cd0, 0x8, 0x10, 0x30, 0x678, 0x58, 0x188, ...
     //modules.First() length 671744
@@ -21,14 +21,14 @@ state("Subnautica", "April 2021")
 init
 {
     int firstModuleSize = modules.First().ModuleMemorySize;
-    print(firstModuleSize.ToString());
+    Debug.Log(firstModuleSize.ToString());
     switch (firstModuleSize)
     {
         case 23801856:
             version = "September 2018";
             break;
         case 671744:
-            version = "April 2021";
+            version = "December 2021";
             break;
     }
 }
