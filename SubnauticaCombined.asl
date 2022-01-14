@@ -1,3 +1,6 @@
+
+using System.CodeDom;
+
 state("Subnautica", "September 2018")
 {
     //player is "Subnautica.exe", 0x142b908, 0x180, 0x128, 0x80, 0x1d0, 0x8, 0x248, ...
@@ -20,6 +23,7 @@ state("Subnautica", "December 2021")
 
 init
 {
+    vars.nullptr = new IntPtr((int)IntPtr.Zero);
     int firstModuleSize = modules.First().ModuleMemorySize;
     print("first module is " + firstModuleSize.ToString() + " bytes long");
     //regions dont work in ASL AAAAAAAAAAA
@@ -36,26 +40,61 @@ init
     string DownLaunchStartedSig = "b8 ?? ?? ?? ?? 48 0fb6 00 85 c0 0f84 ?? ?? ?? ?? f3 0f10 86";
     int DownLaunchStartedOff = 1;
 
-    //signatures for scanning, set in next section
-    string EscapePodSignature;
-    int EscapePodOffset;
-    string LaunchStartedSignature;
-    int LaunchStartedOffset;
+    //Pointers for scanning
+    vars.EscapePodSignaturePointer = vars.nullptr;
+    vars.LaunchStartedSignaturePointer = vars.nullptr;
+
+
+    vars.LaunchStartedOffset;
 
     switch (firstModuleSize)
     {
         case 23801856:
             version = "September 2018";
-            EscapePodSignature = DownEscapePodSig;
-            EscapePodOffset = DownEscapePodOff;
-            LaunchStartedSignature = DownLaunchStartedSig;
-            LaunchStartedOffset = DownLaunchStartedOff;
+            vars.EscapePodSignature = DownEscapePodSig;
+            vars.EscapePodOffset = DownEscapePodOff;
+            vars.LaunchStartedSignature = DownLaunchStartedSig;
+            vars.LaunchStartedOffset = DownLaunchStartedOff;
             break;
         case 671744:
             version = "December 2021";
+            vars.EscapePodSignature = CPEscapePodSig;
+            vars.EscapePodOffset = CPEscapePodOff;
+            vars.LaunchStartedSignature = CPLaunchStartedSig;
+            vars.LaunchStartedOffset = CPLaunchStartedOff;
             break;
     }
-    print(version);
+    print("escape pod offset is " + vars.EscapePodOffset);
+
+    vars.sigScanTokenSource = new CancellationTokenSource();
+    vars.sigScanToken = vars.sigScanTokenSource.Token;
+    vars.sigScanThread = new Thread(() =>
+    {
+        print("starting sig scan thread");
+        
+        var EscapePodTarget = new SigScanTarget(vars.EscapePodOffset, vars.EscapePodSignature);
+        var LaunchStartedTarget = new SigScanTarget(vars.LaunchStartedTarget,  vars.LaunchStartedSignature);
+
+        while (!vars.sigScanToken.IsCancellationRequested)
+        {
+            int p = 0;
+            foreach (var page in game.MemoryPages())
+            {
+                p++;
+                if (p % 50 == 0) { Thread.Sleep(100); }
+                var scanner = new SignatureScanner(game, page.BaseAddress, (int) page.RegionSize);
+
+                if (vars.EscapePodSignaturePointer == vars.nullptr && (vars.EscapePodSignaturePtr = scanner.Scan(EscapePodTarget)) != vars.nullptr)
+                {
+                    vars.EscapePodSignaturePointer = scanner.Scan(EscapePodTarget);
+                }
+                if (vars.LaunchStartedSignaturePointer == vars.nullptr && (vars.LaunchStartedSignaturePointer = scanner.Scan(LaunchStartedTarget)) != vars.nullptr)
+                {
+                    vars.LaunchStartedSignaturePointer = scanner.Scan(LaunchStartedTarget);
+                }
+            }
+        }
+    });
 }
 
 startup
