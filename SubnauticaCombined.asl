@@ -1,7 +1,3 @@
-
-using System.CodeDom;
-using System.Runtime.InteropServices;
-
 state("Subnautica", "September 2018")
 {
     //player is "Subnautica.exe", 0x142b908, 0x180, 0x128, 0x80, 0x1d0, 0x8, 0x248, ...
@@ -46,7 +42,7 @@ init
     vars.LaunchStartedSignaturePointer = vars.nullptr;
 
 
-    vars.LaunchStartedOffset;
+    vars.LaunchStartedOffset = vars.nullptr;
 
     switch (firstModuleSize)
     {
@@ -56,6 +52,7 @@ init
             vars.EscapePodOffset = DownEscapePodOff;
             vars.LaunchStartedSignature = DownLaunchStartedSig;
             vars.LaunchStartedOffset = DownLaunchStartedOff;
+            print("game version is sept 2018");
             break;
         case 671744:
             version = "December 2021";
@@ -63,6 +60,7 @@ init
             vars.EscapePodOffset = CPEscapePodOff;
             vars.LaunchStartedSignature = CPLaunchStartedSig;
             vars.LaunchStartedOffset = CPLaunchStartedOff;
+            print("game version is current patch");
             break;
     }
     print("escape pod offset is " + vars.EscapePodOffset);
@@ -73,11 +71,13 @@ init
     {
         print("starting sig scan thread");
         
-        var EscapePodTarget = new SigScanTarget(vars.EscapePodOffset, vars.EscapePodSignature);
-        var LaunchStartedTarget = new SigScanTarget(vars.LaunchStartedTarget,  vars.LaunchStartedSignature);
+        SigScanTarget EscapePodTarget = new SigScanTarget(vars.EscapePodOffset, vars.EscapePodSignature);
+        SigScanTarget LaunchStartedTarget = new SigScanTarget(vars.LaunchStartedOffset,  vars.LaunchStartedSignature);
+        print("set targets");
 
         while (!vars.sigScanToken.IsCancellationRequested)
         {
+            print("scanning");
             int p = 0;
             foreach (var page in game.MemoryPages())
             {
@@ -88,28 +88,49 @@ init
                 //stop in the middle of foreach if both signatures are found
                 if (vars.EscapePodSignaturePointer != vars.nullptr && vars.LaunchStartedSignaturePointer != vars.nullptr)
                 {
-                    break
+                    break;
                 }
 
                 //scanning
                 if (vars.EscapePodSignaturePointer == vars.nullptr && (vars.EscapePodSignaturePtr = scanner.Scan(EscapePodTarget)) != vars.nullptr)
                 {
                     vars.EscapePodSignaturePointer = scanner.Scan(EscapePodTarget);
+                    print("escape pod found");
                 }
                 if (vars.LaunchStartedSignaturePointer == vars.nullptr && (vars.LaunchStartedSignaturePointer = scanner.Scan(LaunchStartedTarget)) != vars.nullptr)
                 {
                     vars.LaunchStartedSignaturePointer = scanner.Scan(LaunchStartedTarget);
+                    print("launch started found");
                 }
             }
             if (vars.EscapePodSignaturePointer != vars.nullptr && vars.LaunchStartedSignaturePointer != vars.nullptr)
             {
+                print("all signatures found");
                 //deref pointers n stuff
+
+                var LaunchStartedAddress = game.ReadPointer((IntPtr)vars.LaunchStartedSignaturePointer);
+                vars.LaunchStarted = new MemoryWatcher<bool>(LaunchStartedAddress);
+                print("launch started done");
+
+                vars.EscapePodStaticAddress = game.ReadPointer((IntPtr)vars.EscapePodSignaturePointer);
+                print("1");
+                vars.EscapePodStaticWatcher = new MemoryWatcher<IntPtr>(vars.EscapePodStaticAddress); 
+                print("2");
+                //EscapePodStaticWatcher.Currrent will return the address of the current Escape Pod object
+                vars.EscapePodStaticWatcher.Update(game);
+                print("3");
+                var cinematicController = game.ReadPointer((IntPtr)vars.EscapePodStaticWatcher.Current + 0x28);
+                print("4");
+                vars.isIntroActive = new MemoryWatcher<bool>(cinematicController + 0x86);
+                print("escape pod done");
                 
-                var LaunchStartedAddress = game.ReadPointer(vars.LaunchStartedSignaturePointer);
-                vars.LaunchStarted = new new MemoryWatcher<bool>(LaunchStartedAddress)
+                break; //exit while loop
             }
-        }
-    });
+        } // end of while not cancelled loop
+    }); // end of sig scan thread
+    vars.sigScanThread.Priority = ThreadPriority.Lowest;
+    vars.sigScanThread.Start();
+    print("launching scan thread");
 }
 
 startup
@@ -123,7 +144,7 @@ startup
 
 split
 {
-   
+
 }
 
 start
@@ -133,10 +154,36 @@ start
 
 update
 {
-    //print(modules.First().ModuleMemorySize.ToString());
-    //print(modules.First().ToString());
-    //print(current.playerCinematicActive.ToString());
-    //print(current.biomeString);
-    if (settings["end"]) { vars.LaunchStarted.Update(); }
-    if (settings["start"]) {}
+    if (vars.sigScanThread.IsAlive) { return false; }
+
+    if (settings["end"]) { vars.LaunchStarted.Update(game); }
+    if (settings["start"]) 
+    {
+        vars.EscapePodStaticWatcher.Update(game);
+        
+        if (vars.EscapePodStaticWatcher.Current != vars.EscapePodStaticWatcher.Old) 
+        {
+            var cinematicController = game.ReadPointer((IntPtr)vars.EscapePodStaticAddress.Current + 0x28);
+            vars.isIntroActive = new MemoryWatcher<bool>(cinematicController + 0x86);
+            vars.isIntroActive.Update(game);
+        }
+        else
+        {
+            vars.isIntroActive.Update(game);
+        }
+        
+    }
+    print("intro is active: " + vars.isIntroActive.Current);
+
+    
+}
+
+exit
+{
+    vars.sigScanTokenSource.Cancel();
+}
+
+shutdown
+{
+    vars.sigScanTokenSource.Cancel();
 }
