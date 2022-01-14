@@ -1,5 +1,6 @@
 
 using System.CodeDom;
+using System.Runtime.InteropServices;
 
 state("Subnautica", "September 2018")
 {
@@ -84,6 +85,13 @@ init
                 if (p % 50 == 0) { Thread.Sleep(100); }
                 var scanner = new SignatureScanner(game, page.BaseAddress, (int) page.RegionSize);
 
+                //stop in the middle of foreach if both signatures are found
+                if (vars.EscapePodSignaturePointer != vars.nullptr && vars.LaunchStartedSignaturePointer != vars.nullptr)
+                {
+                    break
+                }
+
+                //scanning
                 if (vars.EscapePodSignaturePointer == vars.nullptr && (vars.EscapePodSignaturePtr = scanner.Scan(EscapePodTarget)) != vars.nullptr)
                 {
                     vars.EscapePodSignaturePointer = scanner.Scan(EscapePodTarget);
@@ -92,6 +100,13 @@ init
                 {
                     vars.LaunchStartedSignaturePointer = scanner.Scan(LaunchStartedTarget);
                 }
+            }
+            if (vars.EscapePodSignaturePointer != vars.nullptr && vars.LaunchStartedSignaturePointer != vars.nullptr)
+            {
+                //deref pointers n stuff
+                
+                var LaunchStartedAddress = game.ReadPointer(vars.LaunchStartedSignaturePointer);
+                vars.LaunchStarted = new new MemoryWatcher<bool>(LaunchStartedAddress)
             }
         }
     });
@@ -108,15 +123,12 @@ startup
 
 split
 {
-    if (!old.rocketLaunching && current.rocketLaunching && settings["end"]) { return true; }
-
-    if (!old.playerCinematicActive && current.playerCinematicActive && current.biomeString == "Precursor_Gun_ControlRoom" && settings["gunDeactivate"]) { return true; print("gun split"); }
+   
 }
 
 start
 {
-    
-    if (old.introCinematicActive && !current.introCinematicActive && settings["start"]) { return true; }
+
 }
 
 update
@@ -125,4 +137,6 @@ update
     //print(modules.First().ToString());
     //print(current.playerCinematicActive.ToString());
     //print(current.biomeString);
+    if (settings["end"]) { vars.LaunchStarted.Update(); }
+    if (settings["start"]) {}
 }
