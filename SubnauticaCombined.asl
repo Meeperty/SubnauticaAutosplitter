@@ -41,9 +41,6 @@ init
     vars.EscapePodSignaturePointer = vars.nullptr;
     vars.LaunchStartedSignaturePointer = vars.nullptr;
 
-
-    vars.LaunchStartedOffset = vars.nullptr;
-
     switch (firstModuleSize)
     {
         case 23801856:
@@ -52,6 +49,7 @@ init
             vars.EscapePodOffset = DownEscapePodOff;
             vars.LaunchStartedSignature = DownLaunchStartedSig;
             vars.LaunchStartedOffset = DownLaunchStartedOff;
+            vars.isCP = false;
             print("game version is sept 2018");
             break;
         case 671744:
@@ -60,6 +58,7 @@ init
             vars.EscapePodOffset = CPEscapePodOff;
             vars.LaunchStartedSignature = CPLaunchStartedSig;
             vars.LaunchStartedOffset = CPLaunchStartedOff;
+            vars.isCP = true;
             print("game version is current patch");
             break;
     }
@@ -108,12 +107,12 @@ init
                 print("all signatures found");
                 //deref pointers n stuff
                 IntPtr LaunchStartedAddress;
-                game.ReadPointer((IntPtr)vars.LaunchStartedSignaturePointer, false, out LaunchStartedAddress);
+                game.ReadPointer((IntPtr) vars.LaunchStartedSignaturePointer, (bool) vars.isCP, out LaunchStartedAddress);
                 vars.LaunchStarted = new MemoryWatcher<bool>(LaunchStartedAddress);
                 print("launch started done");
 
                 IntPtr EscapePodStaticAddress;
-                game.ReadPointer((IntPtr)vars.EscapePodSignaturePointer, false, out EscapePodStaticAddress);
+                game.ReadPointer((IntPtr) vars.EscapePodSignaturePointer, (bool) vars.isCP, out EscapePodStaticAddress);
                 print("escape pod static field is at " + EscapePodStaticAddress.ToString("X"));
                 vars.EscapePodStaticWatcher = new MemoryWatcher<IntPtr>(EscapePodStaticAddress);
                 vars.EscapePodStaticWatcher.Update(game);
