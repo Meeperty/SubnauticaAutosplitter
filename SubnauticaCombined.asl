@@ -95,7 +95,7 @@ init
                 if (vars.EscapePodSignaturePointer == vars.nullptr && (vars.EscapePodSignaturePtr = scanner.Scan(EscapePodTarget)) != vars.nullptr)
                 {
                     vars.EscapePodSignaturePointer = scanner.Scan(EscapePodTarget);
-                    print("escape pod found");
+                    print("escape pod found at " + vars.EscapePodSignaturePointer.ToString("X"));
                 }
                 if (vars.LaunchStartedSignaturePointer == vars.nullptr && (vars.LaunchStartedSignaturePointer = scanner.Scan(LaunchStartedTarget)) != vars.nullptr)
                 {
@@ -107,20 +107,19 @@ init
             {
                 print("all signatures found");
                 //deref pointers n stuff
-
-                var LaunchStartedAddress = game.ReadPointer((IntPtr)vars.LaunchStartedSignaturePointer);
+                IntPtr LaunchStartedAddress;
+                game.ReadPointer((IntPtr)vars.LaunchStartedSignaturePointer, false, out LaunchStartedAddress);
                 vars.LaunchStarted = new MemoryWatcher<bool>(LaunchStartedAddress);
                 print("launch started done");
 
-                vars.EscapePodStaticAddress = game.ReadPointer((IntPtr)vars.EscapePodSignaturePointer);
-                print("1");
-                vars.EscapePodStaticWatcher = new MemoryWatcher<IntPtr>(vars.EscapePodStaticAddress); 
-                print("2");
-                //EscapePodStaticWatcher.Currrent will return the address of the current Escape Pod object
+                IntPtr EscapePodStaticAddress;
+                game.ReadPointer((IntPtr)vars.EscapePodSignaturePointer, false, out EscapePodStaticAddress);
+                print("escape pod static field is at " + EscapePodStaticAddress.ToString("X"));
+                vars.EscapePodStaticWatcher = new MemoryWatcher<IntPtr>(EscapePodStaticAddress);
                 vars.EscapePodStaticWatcher.Update(game);
-                print("3");
+                print("escape pod is at " + vars.EscapePodStaticWatcher.Current.ToString("X")); 
+                //EscapePodStaticWatcher.Currrent will return the address of the current Escape Pod object
                 var cinematicController = game.ReadPointer((IntPtr)vars.EscapePodStaticWatcher.Current + 0x28);
-                print("4");
                 vars.isIntroActive = new MemoryWatcher<bool>(cinematicController + 0x86);
                 print("escape pod done");
                 
@@ -144,12 +143,12 @@ startup
 
 split
 {
-
+    if (settings["end"] && vars.LaunchStarted.Current == true && vars.LaunchStarted.Old == false) { return true; }
 }
 
 start
 {
-
+    if (settings["start"] && vars.isIntroActive.Current == false && vars.isIntroActive.Old == true) { return true; }
 }
 
 update
@@ -163,19 +162,17 @@ update
         
         if (vars.EscapePodStaticWatcher.Current != vars.EscapePodStaticWatcher.Old) 
         {
-            var cinematicController = game.ReadPointer((IntPtr)vars.EscapePodStaticAddress.Current + 0x28);
+            print("escape pod has changed, recalculating");
+            var cinematicController = game.ReadPointer((IntPtr)vars.EscapePodStaticWatcher.Current + 0x28);
             vars.isIntroActive = new MemoryWatcher<bool>(cinematicController + 0x86);
             vars.isIntroActive.Update(game);
+            print("escape pod changed to " + vars.EscapePodStaticWatcher.Current.ToString("X"));
         }
         else
         {
             vars.isIntroActive.Update(game);
         }
-        
     }
-    print("intro is active: " + vars.isIntroActive.Current);
-
-    
 }
 
 exit
