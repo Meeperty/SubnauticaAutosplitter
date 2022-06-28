@@ -14,30 +14,38 @@ namespace SubnauticaAutosplitter
 {
     public class SubnauticaComponent : AutoSplitComponent
     {
-        internal SubnauticaComponent(LiveSplitState state) : base(new SubnauticaSplitter(settings), state) { }
+        static SubnauticaSplitter splitter = new SubnauticaSplitter(settings);
+
+        internal SubnauticaComponent(LiveSplitState state) : base(splitter, state) { }
 
         private readonly static SubnauticaSettings settings = new SubnauticaSettings(); 
 
         public override string ComponentName => "Subnautica Autosplitter";
 
-
         public override void Dispose()
         {
         }
 
+        public override void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
+        {
+            splitter.Update();
+            base.Update(invalidator, state, width, height, mode);
+        }
+
         public override XmlNode GetSettings(XmlDocument document)
         {
-            throw new NotImplementedException();
+            XmlElement settings_Node = document.CreateElement("Settings");
+            return settings_Node;
         }
 
         public override Control GetSettingsControl(LayoutMode mode)
         {
-            throw new NotImplementedException();
+            return settings;
         }
 
         public override void SetSettings(XmlNode settings)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

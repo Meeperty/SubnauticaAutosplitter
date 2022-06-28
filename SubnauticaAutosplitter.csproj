@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="LiveSplit.Core">
       <HintPath>..\..\..\Documents\LiveSplit_1.8.16\LiveSplit.Core.dll</HintPath>
@@ -49,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SubnauticaFactory.cs" />
     <Compile Include="SubnauticaSplitter.cs" />
     <Compile Include="SubnauticaComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,4 +64,10 @@
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo Moving dll
+xcopy "C:\Users\Us\source\repos\SubnauticaAutosplitter\bin\Debug\SubnauticaAutosplitter.dll" "C:\Users\Us\Documents\LiveSplit_1.8.16\Components" /Y
+echo Moving pdb
+xcopy "C:\Users\Us\source\repos\SubnauticaAutosplitter\bin\Debug\SubnauticaAutosplitter.pdb" "C:\Users\Us\Documents\LiveSplit_1.8.16\Components" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
