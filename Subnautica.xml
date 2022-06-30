@@ -2,7 +2,7 @@
 <updates>
 	<update version="1.0.0">
 		<files>
-			<file path="bin/release"/>
+			<file path="SubnauticaAutosplitter.dll" status="changed" />
 		</files>
 		<changelog>
 			<change>First release</change>
