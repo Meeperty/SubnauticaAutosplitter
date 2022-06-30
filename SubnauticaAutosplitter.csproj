@@ -63,10 +63,14 @@
       <DependentUpon>SubnauticaSettings.cs</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Subnautica.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo Moving dll
 xcopy "C:\Users\Us\source\repos\SubnauticaAutosplitter\bin\Debug\SubnauticaAutosplitter.dll" "C:\Users\Us\Documents\LiveSplit_1.8.16\Components" /Y
+xcopy "C:\Users\Us\source\repos\SubnauticaAutosplitter\bin\Debug\SubnauticaAutosplitter.dll" "C:\Users\Us\source\repos\SubnauticaAutosplitter" /Y
 echo Moving pdb
 xcopy "C:\Users\Us\source\repos\SubnauticaAutosplitter\bin\Debug\SubnauticaAutosplitter.pdb" "C:\Users\Us\Documents\LiveSplit_1.8.16\Components" /Y</PostBuildEvent>
   </PropertyGroup>

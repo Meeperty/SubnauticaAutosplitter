@@ -41,13 +41,22 @@ namespace SubnauticaAutosplitter
 
         public void Update()
         {
-            if (lifepodCodeloaded)
-                isIntroActiveWatcher.Update(game);
-
-            if (game.HasExited)
+            if (game != null)
             {
-                lifepodCodeloaded = false;
-                launchRocketCodeLoaded = false;
+                if (game.HasExited)
+                {
+                    lifepodCodeloaded = false;
+                    launchRocketCodeLoaded = false;
+                }
+
+                if (lifepodCodeloaded)
+                    isIntroActiveWatcher.Update(game);
+
+                if (launchRocketCodeLoaded)
+                {
+                    launchStartedWatcher.Update(game);
+                    WriteDebug($"Updating launch started, now {launchStartedWatcher.Current}");
+                }
             }
         }
 
@@ -66,7 +75,6 @@ namespace SubnauticaAutosplitter
             }
         }
 
-        IntPtr lifepodScanResult = IntPtr.Zero;
         public static MemoryWatcher<IntPtr> lifepodFieldWatcher;
         public static MemoryWatcher<bool> isIntroActiveWatcher = new MemoryWatcher<bool>(IntPtr.Zero);
 
@@ -90,7 +98,7 @@ namespace SubnauticaAutosplitter
                     if (ptr != IntPtr.Zero)
                     {
                         lifepodCodeloaded = true;
-                        lifepodScanResult = ptr;
+                        IntPtr lifepodScanResult = ptr;
 
                         IntPtr escapePodStaticAddress = game.ReadPointer(lifepodScanResult); //pointer to the escape pod static field;
 
@@ -119,13 +127,37 @@ namespace SubnauticaAutosplitter
             }
         }
 
+
+        IntPtr launchRocketScanResult = IntPtr.Zero;
+        public static MemoryWatcher<bool> launchStartedWatcher = new MemoryWatcher<bool>(IntPtr.Zero);
+
         public void CheckRocket(object o)
         {
             if (!launchRocketCodeLoaded)
             {
+                WriteDebug("Scanning Rocket");
                 foreach (var page in game.MemoryPages())
                 {
+                    var scanner = new SignatureScanner(game, page.BaseAddress, (int)page.RegionSize);
+                    IntPtr ptr = IntPtr.Zero;
+                    if (gameVersion == GameVersion.CurrentPatch)
+                    {
+                        ptr = scanner.Scan(CPLaunchTarget);
+                    }
+                    else //sept 2018
+                    {
+                        ptr = scanner.Scan(DownPatchLaunchTarget);
+                    }
+                    if (ptr != IntPtr.Zero)
+                    {
+                        launchRocketCodeLoaded = true;
+                        launchRocketScanResult = ptr;
 
+                        IntPtr launchStartedAddress = game.ReadPointer(launchRocketScanResult);
+                        launchStartedWatcher = new MemoryWatcher<bool>(launchStartedAddress);
+                        WriteDebug("Launch Started Found");
+                        WriteDebug($"Launch Started at {launchStartedAddress.ToString("X")}");
+                    }
                 }
             }
         }
@@ -158,12 +190,17 @@ namespace SubnauticaAutosplitter
         #region Logic
         public bool ShouldSplit(LiveSplitState state)
         {
-            throw new NotImplementedException();
+            if (launchRocketCodeLoaded)
+            {
+                if (launchStartedWatcher.Current == true && launchStartedWatcher.Old == false)
+                    return true;
+            }
+            return false;
         }
 
         public bool ShouldReset(LiveSplitState state)
         {
-            throw new NotImplementedException();
+            return false;
         }
         
         public bool ShouldStart(LiveSplitState state)

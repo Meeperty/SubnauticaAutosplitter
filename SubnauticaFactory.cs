@@ -21,7 +21,7 @@ namespace SubnauticaAutosplitter
 
         public string UpdateName => ComponentName;
 
-        public string XMLURL => UpdateURL + "SubnauticaAutosplitter.xml";
+        public string XMLURL => UpdateURL + "Subnautica.xml";
 
         public string UpdateURL => "https://raw.githubusercontent.com/";
 
