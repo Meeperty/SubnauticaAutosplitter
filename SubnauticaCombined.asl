@@ -21,7 +21,7 @@ state("Subnautica", "December 2021")
 init
 {
     int firstModuleSize = modules.First().ModuleMemorySize;
-    Debug.Log(firstModuleSize.ToString());
+    Debug.WriteLine(firstModuleSize.ToString());
     switch (firstModuleSize)
     {
         case 23801856:
@@ -35,7 +35,7 @@ init
 
 startup
 {
-    //settings.Add(id (string), default_value (bool), description (string), parent (string))
+    //settings.Add(id (string),Debug.WriteLine default_value (bool), description (string), parent (string))
     settings.Add("start", true, "Split on start");
     settings.Add("end", true, "Split on rocket launch");
     settings.Add("gunDeactivate", false, "Split on gun deactivation");
@@ -46,7 +46,7 @@ split
 {
     if (!old.rocketLaunching && current.rocketLaunching && settings["end"]) { return true; }
 
-    if (!old.playerCinematicActive && current.playerCinematicActive && current.biomeString == "Precursor_Gun_ControlRoom" && settings["gunDeactivate"]) { return true; print("gun split"); }
+    if (!old.playerCinematicActive && current.playerCinematicActive && current.biomeString == "Precursor_Gun_ControlRoom" && settings["gunDeactivate"]) { return true; Debug.WriteLine("gun split"); }
 }
 
 start
@@ -57,8 +57,8 @@ start
 
 update
 {
-    //print(modules.First().ModuleMemorySize.ToString());
-    //print(modules.First().ToString());
-    //print(current.playerCinematicActive.ToString());
-    //print(current.biomeString);
+    //Debug.WriteLine(modules.First().ModuleMemorySize.ToString());
+    //Debug.WriteLine(modules.First().ToString());
+    //Debug.WriteLine(current.playerCinematicActive.ToString());
+    //Debug.WriteLine(current.biomeString);
 }
