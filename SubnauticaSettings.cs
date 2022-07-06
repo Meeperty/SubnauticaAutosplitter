@@ -16,5 +16,17 @@ namespace SubnauticaAutosplitter
         {
             InitializeComponent();
         }
+
+        internal bool StartSplit
+        {
+            get => startSplitCheckBox.Checked;
+            set => startSplitCheckBox.Checked = value;
+        }
+
+        internal bool EndSplit
+        {
+            get => endSplitCheckBox.Checked;
+            set => endSplitCheckBox.Checked = value;
+        }
     }
 }

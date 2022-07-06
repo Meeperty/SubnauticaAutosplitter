@@ -13,6 +13,7 @@ namespace SubnauticaAutosplitter
         public Process game;
         public Timer lifepodCheckTimer;
         public Timer rocketCheckTimer;
+        public Timer debugWriteTimer;
         public bool lifepodCodeloaded = false;
         public bool launchRocketCodeLoaded = false;
         GameVersion gameVersion;
@@ -33,10 +34,42 @@ namespace SubnauticaAutosplitter
         SigScanTarget DownPatchLaunchTarget = new SigScanTarget(DownPatchLaunchOffset, DownPatchLaunchSig);
         #endregion
 
-        private readonly SubnauticaSettings settings;
+        private SubnauticaSettings settings;
         internal SubnauticaSplitter(SubnauticaSettings settings)
         {
             this.settings = settings;
+        }
+
+        internal bool StartSplit
+        {
+            get
+            {
+                if (settings != null)
+                    return settings.StartSplit;
+                return true;
+            }
+        }
+
+        internal bool EndSplit
+        {
+            get
+            {
+                if (settings != null)
+                    return settings.EndSplit;
+                return true;
+            }
+        }
+
+        internal void DebugWrites(object o)
+        {
+            if (settings != null)
+            {
+                WriteDebug("Settings not null");
+            }
+            else
+            {
+                WriteDebug("Settings are null");
+            }
         }
 
         public void Update()
@@ -55,7 +88,6 @@ namespace SubnauticaAutosplitter
                 if (launchRocketCodeLoaded)
                 {
                     launchStartedWatcher.Update(game);
-                    WriteDebug($"Updating launch started, now {launchStartedWatcher.Current}");
                 }
             }
         }
@@ -127,8 +159,6 @@ namespace SubnauticaAutosplitter
             }
         }
 
-
-        IntPtr launchRocketScanResult = IntPtr.Zero;
         public static MemoryWatcher<bool> launchStartedWatcher = new MemoryWatcher<bool>(IntPtr.Zero);
 
         public void CheckRocket(object o)
@@ -151,7 +181,7 @@ namespace SubnauticaAutosplitter
                     if (ptr != IntPtr.Zero)
                     {
                         launchRocketCodeLoaded = true;
-                        launchRocketScanResult = ptr;
+                        IntPtr launchRocketScanResult = ptr;
 
                         IntPtr launchStartedAddress = game.ReadPointer(launchRocketScanResult);
                         launchStartedWatcher = new MemoryWatcher<bool>(launchStartedAddress);
@@ -190,7 +220,7 @@ namespace SubnauticaAutosplitter
         #region Logic
         public bool ShouldSplit(LiveSplitState state)
         {
-            if (launchRocketCodeLoaded)
+            if (launchRocketCodeLoaded && EndSplit)
             {
                 if (launchStartedWatcher.Current == true && launchStartedWatcher.Old == false)
                     return true;
@@ -213,10 +243,11 @@ namespace SubnauticaAutosplitter
                     WriteDebug("Starting timers");
                     lifepodCheckTimer = new Timer(CheckLifepod, null, 0, 6000);
                     rocketCheckTimer = new Timer(CheckRocket, null, 0, 20000);
+                    debugWriteTimer = new Timer(DebugWrites, null, 0, 5000);
                 }
                 return false;
             }
-            if (lifepodCodeloaded)
+            if (lifepodCodeloaded && StartSplit)
             {
                 if (isIntroActiveWatcher.Current == false && isIntroActiveWatcher.Old == true)
                     return true;
@@ -229,9 +260,9 @@ namespace SubnauticaAutosplitter
 
         #endregion Logic
 
-        internal void WriteDebug(string message)
+        private void WriteDebug(string message)
         {
-            Debug.WriteLine($"[Sub Autosplit] {message}");
+            Debug.WriteLine($"[Subnautica Splitter] {message}");
         }
     }
 

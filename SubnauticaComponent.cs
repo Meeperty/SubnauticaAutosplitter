@@ -9,6 +9,7 @@ using LiveSplit.Model;
 using System.Xml;
 using LiveSplit.UI;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace SubnauticaAutosplitter
 {
@@ -35,7 +36,30 @@ namespace SubnauticaAutosplitter
         public override XmlNode GetSettings(XmlDocument document)
         {
             XmlElement settings_Node = document.CreateElement("Settings");
+
+            XmlElement startSplit_Node = document.CreateElement("startSplit");
+            startSplit_Node.InnerText = settings.StartSplit.ToString();
+            settings_Node.AppendChild(startSplit_Node);
+
+            XmlElement endSplit_Node = document.CreateElement("endSplit");
+            endSplit_Node.InnerText = settings.EndSplit.ToString();
+            settings_Node.AppendChild(endSplit_Node);
+
             return settings_Node;
+        }
+
+        public override void SetSettings(XmlNode node)
+        {
+            if (bool.TryParse(node["startSplit"]?.InnerText, out bool val))
+            {
+                settings.StartSplit = val;
+                WriteDebug($"startSplit set to {val}");
+            }
+            if (bool.TryParse(node["endSplit"]?.InnerText, out bool val2))
+            {
+                settings.StartSplit = val2;
+                WriteDebug($"endSplit set to {val}");
+            }
         }
 
         public override Control GetSettingsControl(LayoutMode mode)
@@ -43,9 +67,9 @@ namespace SubnauticaAutosplitter
             return settings;
         }
 
-        public override void SetSettings(XmlNode settings)
+        private void WriteDebug(string message)
         {
-            
+            Debug.WriteLine($"[Subnautica Component] {message}");
         }
     }
 }

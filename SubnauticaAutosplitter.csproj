@@ -66,6 +66,11 @@
   <ItemGroup>
     <Content Include="Subnautica.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SubnauticaSettings.resx">
+      <DependentUpon>SubnauticaSettings.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo Moving dll

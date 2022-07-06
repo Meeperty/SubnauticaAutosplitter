@@ -1,4 +1,6 @@
-﻿namespace SubnauticaAutosplitter
+﻿using System.Windows.Forms;
+
+namespace SubnauticaAutosplitter
 {
     partial class SubnauticaSettings
     {
@@ -28,10 +30,58 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.MainPanel = new System.Windows.Forms.Panel();
+            this.endSplitCheckBox = new System.Windows.Forms.CheckBox();
+            this.startSplitCheckBox = new System.Windows.Forms.CheckBox();
+            this.MainPanel.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // MainPanel
+            // 
+            this.MainPanel.Controls.Add(this.endSplitCheckBox);
+            this.MainPanel.Controls.Add(this.startSplitCheckBox);
+            this.MainPanel.Location = new System.Drawing.Point(0, 0);
+            this.MainPanel.Name = "MainPanel";
+            this.MainPanel.Size = new System.Drawing.Size(457, 563);
+            this.MainPanel.TabIndex = 0;
+            // 
+            // endSplitCheckBox
+            // 
+            this.endSplitCheckBox.AutoSize = true;
+            this.endSplitCheckBox.Location = new System.Drawing.Point(3, 38);
+            this.endSplitCheckBox.Name = "endSplitCheckBox";
+            this.endSplitCheckBox.Size = new System.Drawing.Size(359, 29);
+            this.endSplitCheckBox.TabIndex = 1;
+            this.endSplitCheckBox.Text = "Autosplit when rocket cutscene starts";
+            this.endSplitCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // startSplitCheckBox
+            // 
+            this.startSplitCheckBox.AutoSize = true;
+            this.startSplitCheckBox.Location = new System.Drawing.Point(3, 3);
+            this.startSplitCheckBox.Name = "startSplitCheckBox";
+            this.startSplitCheckBox.Size = new System.Drawing.Size(364, 29);
+            this.startSplitCheckBox.TabIndex = 0;
+            this.startSplitCheckBox.Text = "Autostart after crash landing cutscene";
+            this.startSplitCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // SubnauticaSettings
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.MainPanel);
+            this.Name = "SubnauticaSettings";
+            this.Size = new System.Drawing.Size(457, 563);
+            this.MainPanel.ResumeLayout(false);
+            this.MainPanel.PerformLayout();
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private Panel MainPanel;
+        private CheckBox endSplitCheckBox;
+        private CheckBox startSplitCheckBox;
     }
 }
