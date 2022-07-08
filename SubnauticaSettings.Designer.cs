@@ -60,9 +60,9 @@ namespace SubnauticaAutosplitter
             this.startSplitCheckBox.AutoSize = true;
             this.startSplitCheckBox.Location = new System.Drawing.Point(3, 3);
             this.startSplitCheckBox.Name = "startSplitCheckBox";
-            this.startSplitCheckBox.Size = new System.Drawing.Size(364, 29);
+            this.startSplitCheckBox.Size = new System.Drawing.Size(355, 29);
             this.startSplitCheckBox.TabIndex = 0;
-            this.startSplitCheckBox.Text = "Autostart after crash landing cutscene";
+            this.startSplitCheckBox.Text = "Autostart after skipping first cutscene\r\n";
             this.startSplitCheckBox.UseVisualStyleBackColor = true;
             // 
             // SubnauticaSettings
@@ -83,5 +83,10 @@ namespace SubnauticaAutosplitter
         private Panel MainPanel;
         private CheckBox endSplitCheckBox;
         private CheckBox startSplitCheckBox;
+
+        public SubnauticaSettings()
+        {
+            InitializeComponent();
+        }
     }
 }

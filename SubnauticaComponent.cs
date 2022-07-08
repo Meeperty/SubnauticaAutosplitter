@@ -15,11 +15,10 @@ namespace SubnauticaAutosplitter
 {
     public class SubnauticaComponent : AutoSplitComponent
     {
+        private static SubnauticaSettings settings = new SubnauticaSettings();
         static SubnauticaSplitter splitter = new SubnauticaSplitter(settings);
 
         internal SubnauticaComponent(LiveSplitState state) : base(splitter, state) { }
-
-        private readonly static SubnauticaSettings settings = new SubnauticaSettings(); 
 
         public override string ComponentName => "Subnautica Autosplitter";
 
@@ -57,7 +56,7 @@ namespace SubnauticaAutosplitter
             }
             if (bool.TryParse(node["endSplit"]?.InnerText, out bool val2))
             {
-                settings.StartSplit = val2;
+                settings.EndSplit = val2;
                 WriteDebug($"endSplit set to {val}");
             }
         }

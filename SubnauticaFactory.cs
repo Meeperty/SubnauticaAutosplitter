@@ -23,7 +23,7 @@ namespace SubnauticaAutosplitter
 
         public string XMLURL => UpdateURL + "Subnautica.xml";
 
-        public string UpdateURL => "https://raw.githubusercontent.com/Meeperty/SubnauticaAutosplitter/component/";
+        public string UpdateURL => "https://raw.githubusercontent.com/Meeperty/SubnauticaAutosplitter/pointer-component/";
 
         public Version Version => Version.Parse("1.0.0");
 

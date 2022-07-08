@@ -12,11 +12,6 @@ namespace SubnauticaAutosplitter
 {
     public partial class SubnauticaSettings : UserControl
     {
-        public SubnauticaSettings()
-        {
-            InitializeComponent();
-        }
-
         internal bool StartSplit
         {
             get => startSplitCheckBox.Checked;
