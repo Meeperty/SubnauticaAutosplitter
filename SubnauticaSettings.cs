@@ -23,5 +23,11 @@ namespace SubnauticaAutosplitter
             get => endSplitCheckBox.Checked;
             set => endSplitCheckBox.Checked = value;
         }
+
+        internal bool GunSplit
+        {
+            get => gunSplitcheckBox.Checked;
+            set => gunSplitcheckBox.Checked = value;
+        }
     }
 }

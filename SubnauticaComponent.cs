@@ -44,6 +44,10 @@ namespace SubnauticaAutosplitter
             endSplit_Node.InnerText = settings.EndSplit.ToString();
             settings_Node.AppendChild(endSplit_Node);
 
+            XmlElement gunSplit_Node = document.CreateElement("gunSplit");
+            gunSplit_Node.InnerText = settings.EndSplit.ToString();
+            settings_Node.AppendChild(gunSplit_Node);
+
             return settings_Node;
         }
 
@@ -57,7 +61,12 @@ namespace SubnauticaAutosplitter
             if (bool.TryParse(node["endSplit"]?.InnerText, out bool val2))
             {
                 settings.EndSplit = val2;
-                WriteDebug($"endSplit set to {val}");
+                WriteDebug($"endSplit set to {val2}");
+            }
+            if (bool.TryParse(node["gunSplit"]?.InnerText, out bool val3))
+            {
+                settings.GunSplit = val3;
+                WriteDebug($"gunSplit set to {val3}");
             }
         }
 
