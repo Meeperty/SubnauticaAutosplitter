@@ -18,8 +18,11 @@ namespace SubnauticaAutosplitter
         private static SubnauticaSettings settings = new SubnauticaSettings();
         static SubnauticaSplitter splitter = new SubnauticaSplitter(settings);
 
-        internal SubnauticaComponent(LiveSplitState state) : base(splitter, state) { }
-
+        internal SubnauticaComponent(LiveSplitState state) : base(splitter, state)
+        {
+            state.OnReset += OnReset;
+        }
+        
         public override string ComponentName => "Subnautica Autosplitter";
 
         public override void Dispose()
@@ -30,6 +33,11 @@ namespace SubnauticaAutosplitter
         {
             splitter.Update();
             base.Update(invalidator, state, width, height, mode);
+        }
+        
+        public void OnReset(object sender, TimerPhase t)
+        {
+            splitter.OnReset(t);
         }
 
         public override XmlNode GetSettings(XmlDocument document)
@@ -45,8 +53,12 @@ namespace SubnauticaAutosplitter
             settings_Node.AppendChild(endSplit_Node);
 
             XmlElement gunSplit_Node = document.CreateElement("gunSplit");
-            gunSplit_Node.InnerText = settings.EndSplit.ToString();
+            gunSplit_Node.InnerText = settings.GunSplit.ToString();
             settings_Node.AppendChild(gunSplit_Node);
+
+            XmlElement toothSplit_Node = document.CreateElement("toothSplit");
+            toothSplit_Node.InnerText = settings.ToothSplit.ToString();
+            settings_Node.AppendChild(toothSplit_Node);
 
             return settings_Node;
         }
@@ -67,6 +79,11 @@ namespace SubnauticaAutosplitter
             {
                 settings.GunSplit = val3;
                 WriteDebug($"gunSplit set to {val3}");
+            }
+            if (bool.TryParse(node["toothSplit"]?.InnerText, out bool val4))
+            {
+                settings.ToothSplit = val4;
+                WriteDebug($"toothSplit set to {val4}");
             }
         }
 

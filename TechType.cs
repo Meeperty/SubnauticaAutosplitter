@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SubnauticaAutosplitter
 {
-    enum TechType
+    public enum TechType
     {
         None = 0,
         Quartz = 1,

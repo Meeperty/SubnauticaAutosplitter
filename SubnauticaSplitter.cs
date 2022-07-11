@@ -2,6 +2,7 @@
 using LiveSplit.Model;
 using LiveSplit.UI.Components.AutoSplit;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -62,6 +63,16 @@ namespace SubnauticaAutosplitter
                 return false;
             }
         }
+        internal bool ToothSplitSetting
+        {
+            get
+            {
+                if (settings != null)
+                    return settings.ToothSplit;
+                return false;
+            }
+        }
+        internal bool toothSplitTriggered = false;
 
         public void Update()
         {
@@ -78,7 +89,7 @@ namespace SubnauticaAutosplitter
                 biomeString = IntPtrToString(playerBiomePtr.Current + 0x14, 64);
                 playerCinematicActive.Update(game);
                 inventoryDictionaryPtr.Update(game);
-                WriteDebug($"inv dictionary at {inventoryDictionaryPtr.Current.ToString("X")}");
+                playerInventory = GetInventory(inventoryDictionaryPtr.Current);
             }
         }
 
@@ -109,6 +120,7 @@ namespace SubnauticaAutosplitter
         public static string biomeString;
 
         public static MemoryWatcher<IntPtr> inventoryDictionaryPtr = new MemoryWatcher<IntPtr>(IntPtr.Zero);
+        public static Dictionary<TechType, int> playerInventory;
 
         public void GetGameVersion()
         {
@@ -201,7 +213,30 @@ namespace SubnauticaAutosplitter
             return strBuilder.ToString();
         }
 
-        
+        public Dictionary<TechType, int> GetInventory(IntPtr startAddr)
+        {
+            Dictionary<TechType, int> inv = new Dictionary<TechType, int>();
+            if (game != null)
+            {
+                int size = game.ReadValue<int>(startAddr + 0x18);
+                for (int i = 0; i < size; i++)
+                {
+                    IntPtr itemGroup = game.ReadPointer(startAddr + 0x20 /*to entry*/ + 0x10 /*to ptr*/+ (0x18 * i));
+
+                    if (itemGroup != IntPtr.Zero)
+                    {
+                        TechType itemType = (TechType)game.ReadValue<int>(itemGroup + 0x18);
+
+                        IntPtr list = game.ReadPointer(itemGroup + 0x10);
+                        int itemCount = game.ReadValue<int>(list + 0x18);
+                        inv.Add(itemType, itemCount);
+                        //WriteDebug($"{itemCount} {itemType}");
+                    }
+                }
+            }
+            //WriteDebug("end inv");
+            return inv;
+        }
 
         #endregion
 
@@ -212,14 +247,22 @@ namespace SubnauticaAutosplitter
         {
             if (game != null)
             {
-                if (EndSplitSetting)
+                if (ToothSplitSetting && !toothSplitTriggered)
                 {
-                    if (launchStartedWatcher.Current == true && launchStartedWatcher.Old == false)
+                    if (playerInventory.ContainsKey(TechType.StalkerTooth) && playerInventory[TechType.StalkerTooth] >= 4)
+                    {
+                        toothSplitTriggered = true;
                         return true;
+                    }
                 }
                 if (GunSplitSetting)
                 {
                     if (playerCinematicActive.Current == true && playerCinematicActive.Old == false && biomeString.Trim(' ') == "Precursor_Gun_ControlRoom")
+                        return true;
+                }
+                if (EndSplitSetting)
+                {
+                    if (launchStartedWatcher.Current == true && launchStartedWatcher.Old == false)
                         return true;
                 }
             }
@@ -251,6 +294,12 @@ namespace SubnauticaAutosplitter
             return false;
         }
 
+        public void OnReset(TimerPhase t)
+        {
+            toothSplitTriggered = false;
+            WriteDebug("OnReset");
+        }
+        
         public bool IsGameTimePaused(LiveSplitState state) { return false; }
         public TimeSpan? GetGameTime(LiveSplitState state) { return null; }
 
@@ -261,7 +310,7 @@ namespace SubnauticaAutosplitter
             Debug.WriteLine($"[Subnautica Splitter] {message}");
         }
     }
-
+    
     internal enum GameVersion
     {
         CurrentPatch,

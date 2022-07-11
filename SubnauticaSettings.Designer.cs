@@ -31,14 +31,16 @@ namespace SubnauticaAutosplitter
         private void InitializeComponent()
         {
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.toothSplitChechBox = new System.Windows.Forms.CheckBox();
+            this.gunSplitcheckBox = new System.Windows.Forms.CheckBox();
             this.endSplitCheckBox = new System.Windows.Forms.CheckBox();
             this.startSplitCheckBox = new System.Windows.Forms.CheckBox();
-            this.gunSplitcheckBox = new System.Windows.Forms.CheckBox();
             this.MainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainPanel
             // 
+            this.MainPanel.Controls.Add(this.toothSplitChechBox);
             this.MainPanel.Controls.Add(this.gunSplitcheckBox);
             this.MainPanel.Controls.Add(this.endSplitCheckBox);
             this.MainPanel.Controls.Add(this.startSplitCheckBox);
@@ -47,10 +49,30 @@ namespace SubnauticaAutosplitter
             this.MainPanel.Size = new System.Drawing.Size(457, 563);
             this.MainPanel.TabIndex = 0;
             // 
+            // toothSplitChechBox
+            // 
+            this.toothSplitChechBox.AutoSize = true;
+            this.toothSplitChechBox.Location = new System.Drawing.Point(3, 38);
+            this.toothSplitChechBox.Name = "toothSplitChechBox";
+            this.toothSplitChechBox.Size = new System.Drawing.Size(427, 29);
+            this.toothSplitChechBox.TabIndex = 3;
+            this.toothSplitChechBox.Text = "Split on getting 4 stalker teeth for the first time\r\n";
+            this.toothSplitChechBox.UseVisualStyleBackColor = true;
+            // 
+            // gunSplitcheckBox
+            // 
+            this.gunSplitcheckBox.AutoSize = true;
+            this.gunSplitcheckBox.Location = new System.Drawing.Point(3, 73);
+            this.gunSplitcheckBox.Name = "gunSplitcheckBox";
+            this.gunSplitcheckBox.Size = new System.Drawing.Size(259, 29);
+            this.gunSplitcheckBox.TabIndex = 2;
+            this.gunSplitcheckBox.Text = "Split on QEP deactivation";
+            this.gunSplitcheckBox.UseVisualStyleBackColor = true;
+            // 
             // endSplitCheckBox
             // 
             this.endSplitCheckBox.AutoSize = true;
-            this.endSplitCheckBox.Location = new System.Drawing.Point(3, 38);
+            this.endSplitCheckBox.Location = new System.Drawing.Point(3, 108);
             this.endSplitCheckBox.Name = "endSplitCheckBox";
             this.endSplitCheckBox.Size = new System.Drawing.Size(322, 29);
             this.endSplitCheckBox.TabIndex = 1;
@@ -66,16 +88,6 @@ namespace SubnauticaAutosplitter
             this.startSplitCheckBox.TabIndex = 0;
             this.startSplitCheckBox.Text = "Start after skipping first cutscene\r\n";
             this.startSplitCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // gunSplitcheckBox
-            // 
-            this.gunSplitcheckBox.AutoSize = true;
-            this.gunSplitcheckBox.Location = new System.Drawing.Point(3, 73);
-            this.gunSplitcheckBox.Name = "gunSplitcheckBox";
-            this.gunSplitcheckBox.Size = new System.Drawing.Size(259, 29);
-            this.gunSplitcheckBox.TabIndex = 2;
-            this.gunSplitcheckBox.Text = "Split on QEP deactivation";
-            this.gunSplitcheckBox.UseVisualStyleBackColor = true;
             // 
             // SubnauticaSettings
             // 
@@ -96,10 +108,13 @@ namespace SubnauticaAutosplitter
         private CheckBox endSplitCheckBox;
         private CheckBox startSplitCheckBox;
         private CheckBox gunSplitcheckBox;
-
+        private CheckBox toothSplitChechBox;
+        
         public SubnauticaSettings()
         {
             InitializeComponent();
         }
+
+        
     }
 }
