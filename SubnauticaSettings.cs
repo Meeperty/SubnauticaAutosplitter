@@ -54,9 +54,10 @@ namespace SubnauticaAutosplitter
             set => ionSplitCheckBox.Checked = value;
         }
 
-        private void mountainSplitCheckBox_CheckedChanged(object sender, EventArgs e)
+        internal bool SparseSplit
         {
-
+            get => sparseDeathCheckBox.Checked;
+            set => sparseDeathCheckBox.Checked = value;
         }
     }
 }

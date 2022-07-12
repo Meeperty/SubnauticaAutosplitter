@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LiveSplit;
-using LiveSplit.UI.Components.AutoSplit;
-using LiveSplit.Model;
-using System.Xml;
+﻿using LiveSplit.Model;
 using LiveSplit.UI;
-using System.Windows.Forms;
+using LiveSplit.UI.Components.AutoSplit;
 using System.Diagnostics;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace SubnauticaAutosplitter
 {
@@ -72,6 +66,10 @@ namespace SubnauticaAutosplitter
             ionSplit_node.InnerText = settings.IonSplit.ToString();
             settings_Node.AppendChild(ionSplit_node);
 
+            XmlElement sparseSplit_node = document.CreateElement("sparseSplit");
+            sparseSplit_node.InnerText = settings.SparseSplit.ToString();
+            settings_Node.AppendChild(sparseSplit_node);
+
             return settings_Node;
         }
 
@@ -111,6 +109,11 @@ namespace SubnauticaAutosplitter
             {
                 settings.IonSplit = val7;
                 WriteDebug($"ionSplit set to {val7}");
+            }
+            if (bool.TryParse(node["sparseSplit"]?.InnerText, out bool val8))
+            {
+                settings.SparseSplit = val8;
+                WriteDebug($"sparseSplit set to {val8}");
             }
         }
 

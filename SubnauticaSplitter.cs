@@ -102,6 +102,15 @@ namespace SubnauticaAutosplitter
                 return false;
             }
         }
+        internal bool SparseSplitSetting
+        {
+            get
+            {
+                if (settings != null)
+                    return settings.SparseSplit;
+                return false;
+            }
+        }
 
         public void Update()
         {
@@ -344,6 +353,11 @@ namespace SubnauticaAutosplitter
                 if (IonSplitSetting)
                 {
                     if (knownTech.Contains(TechType.PrecursorIonBattery) && !knownTechOld.Contains(TechType.PrecursorIonBattery))
+                        return true;
+                }
+                if (SparseSplitSetting)
+                {
+                    if ((biomeString == "Lifepod" || biomeString == "safeShallows") && biomeStringOld == "seaTreaderPath")
                         return true;
                 }
                 if (GunSplitSetting)
