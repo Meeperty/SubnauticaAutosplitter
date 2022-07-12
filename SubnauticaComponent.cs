@@ -60,6 +60,10 @@ namespace SubnauticaAutosplitter
             toothSplit_Node.InnerText = settings.ToothSplit.ToString();
             settings_Node.AppendChild(toothSplit_Node);
 
+            XmlElement rocketSplit_Node = document.CreateElement("rocketSplit");
+            rocketSplit_Node.InnerText = settings.RocketSplit.ToString();
+            settings_Node.AppendChild(rocketSplit_Node);
+
             return settings_Node;
         }
 
@@ -84,6 +88,11 @@ namespace SubnauticaAutosplitter
             {
                 settings.ToothSplit = val4;
                 WriteDebug($"toothSplit set to {val4}");
+            }
+            if (bool.TryParse(node["rocketSplit"]?.InnerText, out bool val5))
+            {
+                settings.RocketSplit = val5;
+                WriteDebug($"rocketSplit set to {val5}");
             }
         }
 

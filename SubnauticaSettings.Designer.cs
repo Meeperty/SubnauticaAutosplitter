@@ -31,15 +31,19 @@ namespace SubnauticaAutosplitter
         private void InitializeComponent()
         {
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.rocketSplitCheckBox = new System.Windows.Forms.CheckBox();
             this.toothSplitChechBox = new System.Windows.Forms.CheckBox();
             this.gunSplitcheckBox = new System.Windows.Forms.CheckBox();
             this.endSplitCheckBox = new System.Windows.Forms.CheckBox();
             this.startSplitCheckBox = new System.Windows.Forms.CheckBox();
+            this.mountainSplitCheckBox = new System.Windows.Forms.CheckBox();
             this.MainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainPanel
             // 
+            this.MainPanel.Controls.Add(this.mountainSplitCheckBox);
+            this.MainPanel.Controls.Add(this.rocketSplitCheckBox);
             this.MainPanel.Controls.Add(this.toothSplitChechBox);
             this.MainPanel.Controls.Add(this.gunSplitcheckBox);
             this.MainPanel.Controls.Add(this.endSplitCheckBox);
@@ -48,6 +52,16 @@ namespace SubnauticaAutosplitter
             this.MainPanel.Name = "MainPanel";
             this.MainPanel.Size = new System.Drawing.Size(457, 563);
             this.MainPanel.TabIndex = 0;
+            // 
+            // rocketSplitCheckBox
+            // 
+            this.rocketSplitCheckBox.AutoSize = true;
+            this.rocketSplitCheckBox.Location = new System.Drawing.Point(3, 73);
+            this.rocketSplitCheckBox.Name = "rocketSplitCheckBox";
+            this.rocketSplitCheckBox.Size = new System.Drawing.Size(303, 29);
+            this.rocketSplitCheckBox.TabIndex = 4;
+            this.rocketSplitCheckBox.Text = "Split on getting rocket blueprint\r\n";
+            this.rocketSplitCheckBox.UseVisualStyleBackColor = true;
             // 
             // toothSplitChechBox
             // 
@@ -62,7 +76,7 @@ namespace SubnauticaAutosplitter
             // gunSplitcheckBox
             // 
             this.gunSplitcheckBox.AutoSize = true;
-            this.gunSplitcheckBox.Location = new System.Drawing.Point(3, 73);
+            this.gunSplitcheckBox.Location = new System.Drawing.Point(3, 162);
             this.gunSplitcheckBox.Name = "gunSplitcheckBox";
             this.gunSplitcheckBox.Size = new System.Drawing.Size(259, 29);
             this.gunSplitcheckBox.TabIndex = 2;
@@ -72,7 +86,7 @@ namespace SubnauticaAutosplitter
             // endSplitCheckBox
             // 
             this.endSplitCheckBox.AutoSize = true;
-            this.endSplitCheckBox.Location = new System.Drawing.Point(3, 108);
+            this.endSplitCheckBox.Location = new System.Drawing.Point(3, 197);
             this.endSplitCheckBox.Name = "endSplitCheckBox";
             this.endSplitCheckBox.Size = new System.Drawing.Size(322, 29);
             this.endSplitCheckBox.TabIndex = 1;
@@ -89,6 +103,16 @@ namespace SubnauticaAutosplitter
             this.startSplitCheckBox.Text = "Start after skipping first cutscene\r\n";
             this.startSplitCheckBox.UseVisualStyleBackColor = true;
             // 
+            // mountainSplitCheckBox
+            // 
+            this.mountainSplitCheckBox.AutoSize = true;
+            this.mountainSplitCheckBox.Location = new System.Drawing.Point(3, 108);
+            this.mountainSplitCheckBox.Name = "mountainSplitCheckBox";
+            this.mountainSplitCheckBox.Size = new System.Drawing.Size(409, 29);
+            this.mountainSplitCheckBox.TabIndex = 5;
+            this.mountainSplitCheckBox.Text = "Split on entering Mountains for the first time\r\n";
+            this.mountainSplitCheckBox.UseVisualStyleBackColor = true;
+            // 
             // SubnauticaSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -103,18 +127,18 @@ namespace SubnauticaAutosplitter
         }
 
         #endregion
-
-        private Panel MainPanel;
-        private CheckBox endSplitCheckBox;
-        private CheckBox startSplitCheckBox;
-        private CheckBox gunSplitcheckBox;
-        private CheckBox toothSplitChechBox;
         
         public SubnauticaSettings()
         {
             InitializeComponent();
         }
-
         
+        private Panel MainPanel;
+        private CheckBox endSplitCheckBox;
+        private CheckBox startSplitCheckBox;
+        private CheckBox gunSplitcheckBox;
+        private CheckBox toothSplitChechBox;
+        private CheckBox rocketSplitCheckBox;
+        private CheckBox mountainSplitCheckBox;
     }
 }
