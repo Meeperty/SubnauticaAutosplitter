@@ -41,5 +41,22 @@ namespace SubnauticaAutosplitter
             get => rocketSplitCheckBox.Checked;
             set => rocketSplitCheckBox.Checked = value;
         }
+
+        internal bool MountainSplit
+        {
+            get => mountainSplitCheckBox.Checked;
+            set => mountainSplitCheckBox.Checked = value;
+        }
+
+        internal bool IonSplit
+        {
+            get => ionSplitCheckBox.Checked;
+            set => ionSplitCheckBox.Checked = value;
+        }
+
+        private void mountainSplitCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

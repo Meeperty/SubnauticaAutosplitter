@@ -64,6 +64,14 @@ namespace SubnauticaAutosplitter
             rocketSplit_Node.InnerText = settings.RocketSplit.ToString();
             settings_Node.AppendChild(rocketSplit_Node);
 
+            XmlElement mountainSplit_node = document.CreateElement("mountainSplit");
+            mountainSplit_node.InnerText = settings.MountainSplit.ToString();
+            settings_Node.AppendChild(mountainSplit_node);
+
+            XmlElement ionSplit_node = document.CreateElement("ionSplit");
+            ionSplit_node.InnerText = settings.IonSplit.ToString();
+            settings_Node.AppendChild(ionSplit_node);
+
             return settings_Node;
         }
 
@@ -93,6 +101,16 @@ namespace SubnauticaAutosplitter
             {
                 settings.RocketSplit = val5;
                 WriteDebug($"rocketSplit set to {val5}");
+            }
+            if (bool.TryParse(node["mountainSplit"]?.InnerText, out bool val6))
+            {
+                settings.MountainSplit = val6;
+                WriteDebug($"mountainSplit set to {val6}");
+            }
+            if (bool.TryParse(node["ionSplit"]?.InnerText, out bool val7))
+            {
+                settings.IonSplit = val7;
+                WriteDebug($"ionSplit set to {val7}");
             }
         }
 

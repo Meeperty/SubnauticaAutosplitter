@@ -74,13 +74,31 @@ namespace SubnauticaAutosplitter
             }
         }
         internal bool toothSplitTriggered = false;
-
         internal bool RocketSplitSetting
         {
             get
             {
                 if (settings != null)
                     return settings.RocketSplit;
+                return false;
+            }
+        }
+        internal bool MountainSplitSetting
+        {
+            get
+            {
+                if (settings != null)
+                    return settings.MountainSplit;
+                return false;
+            }
+        }
+        internal bool mountainSplitTriggered = false;
+        internal bool IonSplitSetting
+        {
+            get
+            {
+                if (settings != null)
+                    return settings.IonSplit;
                 return false;
             }
         }
@@ -97,7 +115,8 @@ namespace SubnauticaAutosplitter
                 launchStartedWatcher.Update(game);
                 
                 playerBiomePtr.Update(game);
-                biomeString = IntPtrToString(playerBiomePtr.Current + 0x14, 64);
+                biomeStringOld = biomeString;
+                biomeString = IntPtrToString(playerBiomePtr.Current + 0x14, 64).Trim(' ');
                 
                 playerCinematicActive.Update(game);
                 
@@ -138,6 +157,7 @@ namespace SubnauticaAutosplitter
         // pointer to the beginning of the string
         public static MemoryWatcher<IntPtr> playerBiomePtr = new MemoryWatcher<IntPtr>(IntPtr.Zero);
         public static string biomeString;
+        public static string biomeStringOld;
 
         public static MemoryWatcher<IntPtr> inventoryDictionaryPtr = new MemoryWatcher<IntPtr>(IntPtr.Zero);
         public static Dictionary<TechType, int> playerInventory;
@@ -313,9 +333,22 @@ namespace SubnauticaAutosplitter
                     if (knownTech.Contains(TechType.RocketBase) && !knownTechOld.Contains(TechType.RocketBase))
                         return true;
                 }
+                if (MountainSplitSetting)
+                {
+                    if (biomeString == "mountains" && biomeStringOld == "kelpForest" && !mountainSplitTriggered)
+                    {
+                        mountainSplitTriggered = true;
+                        return true;
+                    }
+                }
+                if (IonSplitSetting)
+                {
+                    if (knownTech.Contains(TechType.PrecursorIonBattery) && !knownTechOld.Contains(TechType.PrecursorIonBattery))
+                        return true;
+                }
                 if (GunSplitSetting)
                 {
-                    if (playerCinematicActive.Current == true && playerCinematicActive.Old == false && biomeString.Trim(' ') == "Precursor_Gun_ControlRoom")
+                    if (playerCinematicActive.Current == true && playerCinematicActive.Old == false && biomeString == "Precursor_Gun_ControlRoom")
                         return true;
                 }
                 if (EndSplitSetting)
@@ -355,6 +388,7 @@ namespace SubnauticaAutosplitter
         public void OnReset(TimerPhase t)
         {
             toothSplitTriggered = false;
+            mountainSplitTriggered = false;
             WriteDebug("OnReset");
         }
         

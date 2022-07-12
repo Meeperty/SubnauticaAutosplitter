@@ -37,11 +37,13 @@ namespace SubnauticaAutosplitter
             this.endSplitCheckBox = new System.Windows.Forms.CheckBox();
             this.startSplitCheckBox = new System.Windows.Forms.CheckBox();
             this.mountainSplitCheckBox = new System.Windows.Forms.CheckBox();
+            this.ionSplitCheckBox = new System.Windows.Forms.CheckBox();
             this.MainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainPanel
             // 
+            this.MainPanel.Controls.Add(this.ionSplitCheckBox);
             this.MainPanel.Controls.Add(this.mountainSplitCheckBox);
             this.MainPanel.Controls.Add(this.rocketSplitCheckBox);
             this.MainPanel.Controls.Add(this.toothSplitChechBox);
@@ -76,7 +78,7 @@ namespace SubnauticaAutosplitter
             // gunSplitcheckBox
             // 
             this.gunSplitcheckBox.AutoSize = true;
-            this.gunSplitcheckBox.Location = new System.Drawing.Point(3, 162);
+            this.gunSplitcheckBox.Location = new System.Drawing.Point(3, 203);
             this.gunSplitcheckBox.Name = "gunSplitcheckBox";
             this.gunSplitcheckBox.Size = new System.Drawing.Size(259, 29);
             this.gunSplitcheckBox.TabIndex = 2;
@@ -86,7 +88,7 @@ namespace SubnauticaAutosplitter
             // endSplitCheckBox
             // 
             this.endSplitCheckBox.AutoSize = true;
-            this.endSplitCheckBox.Location = new System.Drawing.Point(3, 197);
+            this.endSplitCheckBox.Location = new System.Drawing.Point(3, 238);
             this.endSplitCheckBox.Name = "endSplitCheckBox";
             this.endSplitCheckBox.Size = new System.Drawing.Size(322, 29);
             this.endSplitCheckBox.TabIndex = 1;
@@ -108,10 +110,21 @@ namespace SubnauticaAutosplitter
             this.mountainSplitCheckBox.AutoSize = true;
             this.mountainSplitCheckBox.Location = new System.Drawing.Point(3, 108);
             this.mountainSplitCheckBox.Name = "mountainSplitCheckBox";
-            this.mountainSplitCheckBox.Size = new System.Drawing.Size(409, 29);
+            this.mountainSplitCheckBox.Size = new System.Drawing.Size(316, 54);
             this.mountainSplitCheckBox.TabIndex = 5;
-            this.mountainSplitCheckBox.Text = "Split on entering Mountains for the first time\r\n";
+            this.mountainSplitCheckBox.Text = "Split on entering Mountains\r\nfrom Kelp Forest for the first time\r\n";
             this.mountainSplitCheckBox.UseVisualStyleBackColor = true;
+            this.mountainSplitCheckBox.CheckedChanged += new System.EventHandler(this.mountainSplitCheckBox_CheckedChanged);
+            // 
+            // ionSplitCheckBox
+            // 
+            this.ionSplitCheckBox.AutoSize = true;
+            this.ionSplitCheckBox.Location = new System.Drawing.Point(3, 168);
+            this.ionSplitCheckBox.Name = "ionSplitCheckBox";
+            this.ionSplitCheckBox.Size = new System.Drawing.Size(350, 29);
+            this.ionSplitCheckBox.TabIndex = 6;
+            this.ionSplitCheckBox.Text = "Split on getting ion battery blueprints\r\n";
+            this.ionSplitCheckBox.UseVisualStyleBackColor = true;
             // 
             // SubnauticaSettings
             // 
@@ -140,5 +153,6 @@ namespace SubnauticaAutosplitter
         private CheckBox toothSplitChechBox;
         private CheckBox rocketSplitCheckBox;
         private CheckBox mountainSplitCheckBox;
+        private CheckBox ionSplitCheckBox;
     }
 }
