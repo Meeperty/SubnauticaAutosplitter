@@ -35,8 +35,8 @@ init
 
 startup
 {
-    //settings.Add(id (string),Debug.WriteLine default_value (bool), description (string), parent (string))
-    settings.Add("start", true, "Split on start");
+    //settings.Add(id (string), default_value (bool), description (string), parent (string))
+    settings.Add("start", true, "Start after intro cutscene");
     settings.Add("end", true, "Split on rocket launch");
     settings.Add("gunDeactivate", false, "Split on gun deactivation");
 
