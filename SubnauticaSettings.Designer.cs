@@ -31,14 +31,14 @@ namespace SubnauticaAutosplitter
         private void InitializeComponent()
         {
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.sparseDeathCheckBox = new System.Windows.Forms.CheckBox();
+            this.ionSplitCheckBox = new System.Windows.Forms.CheckBox();
+            this.mountainSplitCheckBox = new System.Windows.Forms.CheckBox();
             this.rocketSplitCheckBox = new System.Windows.Forms.CheckBox();
             this.toothSplitChechBox = new System.Windows.Forms.CheckBox();
             this.gunSplitcheckBox = new System.Windows.Forms.CheckBox();
             this.endSplitCheckBox = new System.Windows.Forms.CheckBox();
             this.startSplitCheckBox = new System.Windows.Forms.CheckBox();
-            this.mountainSplitCheckBox = new System.Windows.Forms.CheckBox();
-            this.ionSplitCheckBox = new System.Windows.Forms.CheckBox();
-            this.sparseDeathCheckBox = new System.Windows.Forms.CheckBox();
             this.MainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,6 +56,36 @@ namespace SubnauticaAutosplitter
             this.MainPanel.Name = "MainPanel";
             this.MainPanel.Size = new System.Drawing.Size(457, 563);
             this.MainPanel.TabIndex = 0;
+            // 
+            // sparseDeathCheckBox
+            // 
+            this.sparseDeathCheckBox.AutoSize = true;
+            this.sparseDeathCheckBox.Location = new System.Drawing.Point(3, 203);
+            this.sparseDeathCheckBox.Name = "sparseDeathCheckBox";
+            this.sparseDeathCheckBox.Size = new System.Drawing.Size(263, 29);
+            this.sparseDeathCheckBox.TabIndex = 7;
+            this.sparseDeathCheckBox.Text = "Split on sparse deathwarp\r\n";
+            this.sparseDeathCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // ionSplitCheckBox
+            // 
+            this.ionSplitCheckBox.AutoSize = true;
+            this.ionSplitCheckBox.Location = new System.Drawing.Point(3, 168);
+            this.ionSplitCheckBox.Name = "ionSplitCheckBox";
+            this.ionSplitCheckBox.Size = new System.Drawing.Size(350, 29);
+            this.ionSplitCheckBox.TabIndex = 6;
+            this.ionSplitCheckBox.Text = "Split on getting ion battery blueprints\r\n";
+            this.ionSplitCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // mountainSplitCheckBox
+            // 
+            this.mountainSplitCheckBox.AutoSize = true;
+            this.mountainSplitCheckBox.Location = new System.Drawing.Point(3, 108);
+            this.mountainSplitCheckBox.Name = "mountainSplitCheckBox";
+            this.mountainSplitCheckBox.Size = new System.Drawing.Size(316, 54);
+            this.mountainSplitCheckBox.TabIndex = 5;
+            this.mountainSplitCheckBox.Text = "Split on entering Mountains\r\nfrom Kelp Forest for the first time\r\n";
+            this.mountainSplitCheckBox.UseVisualStyleBackColor = true;
             // 
             // rocketSplitCheckBox
             // 
@@ -106,36 +136,6 @@ namespace SubnauticaAutosplitter
             this.startSplitCheckBox.TabIndex = 0;
             this.startSplitCheckBox.Text = "Start after skipping first cutscene\r\n";
             this.startSplitCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // mountainSplitCheckBox
-            // 
-            this.mountainSplitCheckBox.AutoSize = true;
-            this.mountainSplitCheckBox.Location = new System.Drawing.Point(3, 108);
-            this.mountainSplitCheckBox.Name = "mountainSplitCheckBox";
-            this.mountainSplitCheckBox.Size = new System.Drawing.Size(316, 54);
-            this.mountainSplitCheckBox.TabIndex = 5;
-            this.mountainSplitCheckBox.Text = "Split on entering Mountains\r\nfrom Kelp Forest for the first time\r\n";
-            this.mountainSplitCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // ionSplitCheckBox
-            // 
-            this.ionSplitCheckBox.AutoSize = true;
-            this.ionSplitCheckBox.Location = new System.Drawing.Point(3, 168);
-            this.ionSplitCheckBox.Name = "ionSplitCheckBox";
-            this.ionSplitCheckBox.Size = new System.Drawing.Size(350, 29);
-            this.ionSplitCheckBox.TabIndex = 6;
-            this.ionSplitCheckBox.Text = "Split on getting ion battery blueprints\r\n";
-            this.ionSplitCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // sparseDeathCheckBox
-            // 
-            this.sparseDeathCheckBox.AutoSize = true;
-            this.sparseDeathCheckBox.Location = new System.Drawing.Point(3, 203);
-            this.sparseDeathCheckBox.Name = "sparseDeathCheckBox";
-            this.sparseDeathCheckBox.Size = new System.Drawing.Size(263, 29);
-            this.sparseDeathCheckBox.TabIndex = 7;
-            this.sparseDeathCheckBox.Text = "Split on sparse deathwarp\r\n";
-            this.sparseDeathCheckBox.UseVisualStyleBackColor = true;
             // 
             // SubnauticaSettings
             // 

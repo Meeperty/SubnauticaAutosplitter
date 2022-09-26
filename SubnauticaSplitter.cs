@@ -4,6 +4,7 @@ using LiveSplit.UI.Components.AutoSplit;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -26,15 +27,7 @@ namespace SubnauticaAutosplitter
         }
         internal void DebugWrites(object o)
         {
-            //if (settings != null)
-            //{
-            //    WriteDebug("Settings not null");
-            //}
-            //else
-            //{
-            //    WriteDebug("Settings are null");
-            //}
-            //WriteDebug($"intro active: {isIntroActiveWatcher.Current}");
+            WriteDebug($"inventoryDictionaryPtr.Current = {inventoryDictionaryPtr.Current}");
         }
 
         internal bool StartSplitSetting
@@ -115,8 +108,8 @@ namespace SubnauticaAutosplitter
         public void Update()
         {
             //Debug.WriteLine("Update");
-            Debug.WriteLineIf(game == null, $"game null");
-            Debug.WriteLineIf(!pointersInitialized, $"pointers not intialized");
+            Debug.WriteLineIf(game == null, $"[Subnautica Autosplitter] game null");
+            Debug.WriteLineIf(!pointersInitialized, $"[Subnautica Autosplitter] pointers not intialized");
             if (game != null && pointersInitialized)
             {
                 isIntroActiveWatcher.Update(game);
@@ -129,15 +122,15 @@ namespace SubnauticaAutosplitter
                 
                 playerCinematicActive.Update(game);
                 
-                inventoryDictionaryPtr.Update(game);
-                Task refreshInventory = new Task(GetInventory, null);
-                refreshInventory.Start();
-                //GetInventory(null);
+                //inventoryDictionaryPtr.Update(game);
+                //Task refreshInventory = new Task(GetInventory, null);
+                //refreshInventory.Start();
+                GetInventory(null);
                 
-                knownTechPtr.Update(game);
-                Task refreshKnownTech = new Task(GetBlueprints, null);
-                refreshKnownTech.Start();
-                //GetBlueprints(null);
+                //knownTechPtr.Update(game);
+                //Task refreshKnownTech = new Task(GetBlueprints, null);
+                //refreshKnownTech.Start();
+                GetBlueprints(null);
             }
         }
 
@@ -193,8 +186,8 @@ namespace SubnauticaAutosplitter
                     break;
 
                 default:
-                    gameVersion = GameVersion.Sept2018;
-                    WriteDebug($"Module length {moduleLen} does not match a version, defaulting to sept 2018");
+                    gameVersion = GameVersion.CurrentPatch;
+                    WriteDebug($"Module length {moduleLen} does not match a version, defaulting to current patch");
                     break;
             }
         }
@@ -214,8 +207,8 @@ namespace SubnauticaAutosplitter
                     launchPtr = new DeepPointer("mono.dll", 0x27EAD8, 0x40, 0x70, 0x50, 0x90, 0x30, 0x8, 0x80);
                     biomePtr = new DeepPointer("Subnautica.exe", 0x142b908, 0x180, 0x128, 0x80, 0x1d0, 0x8, 0x248, 0x1d0);
                     playerCinematicPtr = new DeepPointer("Subnautica.exe", 0x142b908, 0x180, 0x128, 0x80, 0x1d0, 0x8, 0x248, 0x240);
-                    inventoryPtr = new DeepPointer("mono.dll", 0x00296bc8, 0x20, 0xa40, 0x0, 0x40, 0x58, 0x20);
-                    blueprintsPtr = new DeepPointer(0);
+                    inventoryPtr = new DeepPointer("mono.dll", 0x00296bc8, 0x20, 0xa40, 0x0, 0x40, 0x58, 0x28);
+                    blueprintsPtr = new DeepPointer("Subnautica.exe", 0x142b5e8, 0x2A8, 0x58, 0x30, 0xF8, 0x8, 0x18, 0x158);
                     break;
 
                 default:
@@ -223,7 +216,7 @@ namespace SubnauticaAutosplitter
                     launchPtr = new DeepPointer("UnityPlayer.dll", 0x1678148, 0x40, 0x5f0, 0x424, 0x8, 0xd8, 0x40, 0x80);
                     biomePtr = new DeepPointer("UnityPlayer.dll", 0x1690cd0, 0x8, 0x10, 0x30, 0x678, 0x58, 0x188, 0x1d8);
                     playerCinematicPtr = new DeepPointer("UnityPlayer.dll", 0x1690cd0, 0x8, 0x10, 0x30, 0x678, 0x58, 0x188, 0x248);
-                    inventoryPtr = new DeepPointer("UnityPlayer.dll", 0x01691ce0, 0x8, 0x4f8, 0x160, 0x188, 0x40, 0x58, 0x18);
+                    inventoryPtr = new DeepPointer("UnityPlayer.dll", 0x1691ce0, 0x8, 0x4f8, 0x160, 0x188, 0x40, 0x58, 0x18);
                     blueprintsPtr = new DeepPointer("mono-2.0-bdwgc.dll", 0x492DC8, 0x38, 0x230, 0x3F0, 0xE0, 0x770, 0x150, 0x1A8);
                     break;
             }
@@ -233,7 +226,7 @@ namespace SubnauticaAutosplitter
             playerCinematicActive = new MemoryWatcher<bool>(playerCinematicPtr);
             inventoryDictionaryPtr = new MemoryWatcher<IntPtr>(inventoryPtr);
             knownTechPtr = new MemoryWatcher<IntPtr>(blueprintsPtr);
-            Debug.WriteLine("Pointers initialized");
+            WriteDebug("Pointers initialized");
             pointersInitialized = true;
         }
 
@@ -276,11 +269,16 @@ namespace SubnauticaAutosplitter
             Dictionary<TechType, int> inv = new Dictionary<TechType, int>();
             if (game != null)
             {
+                inventoryDictionaryPtr.Update(game);
                 IntPtr startAddr = inventoryDictionaryPtr.Current;
+                WriteDebug($"Getting inventory from {startAddr.ToString("X")}");
+
                 int size = game.ReadValue<int>(startAddr + 0x18);
+                int startOffset = gameVersion == GameVersion.CurrentPatch ? 0x30 : 0x20;
+                int itemOffset = gameVersion == GameVersion.CurrentPatch ? 0x18 : 0x8;
                 for (int i = 0; i < size; i++)
                 {
-                    IntPtr itemGroup = game.ReadPointer(startAddr + 0x20 /*to entry*/ + 0x10 /*to ptr*/+ (0x18 * i));
+                    IntPtr itemGroup = game.ReadPointer(startAddr + startOffset + (itemOffset * i));
 
                     if (itemGroup != IntPtr.Zero)
                     {
@@ -289,9 +287,15 @@ namespace SubnauticaAutosplitter
                         IntPtr list = game.ReadPointer(itemGroup + 0x10);
                         int itemCount = game.ReadValue<int>(list + 0x18);
                         inv.Add(itemType, itemCount);
+                        WriteDebug($"added {itemCount} of {itemType}");
                     }
                 }
             }
+            else
+            {
+                WriteDebug("Game null in GetInventory");
+            }
+            Thread.Sleep(10);
             //WriteDebug("end inv");
             playerInventoryOld = playerInventory;
             playerInventory = inv;
@@ -303,19 +307,32 @@ namespace SubnauticaAutosplitter
             List<TechType> blueprints = new List<TechType>();
             if (game != null)
             {
+                //DateTime start = DateTime.Now;
+                //WriteDebug("Getting bps from " + knownTechPtr.Current.ToString("X"));
+                knownTechPtr.Update(game);
                 IntPtr startAddr = knownTechPtr.Current;
-                IntPtr slots = game.ReadPointer(startAddr + 0x18);
-                int count = game.ReadValue<int>(startAddr + 0x30);
-                
+
+                int slotsOffset = gameVersion == GameVersion.Sept2018 ? 0x20 : 0x18;
+                IntPtr slots = game.ReadPointer(startAddr + slotsOffset);
+                int countOffset = gameVersion == GameVersion.Sept2018 ? 0x40 : 0x30;
+                int count = game.ReadValue<int>(startAddr + countOffset);
+
+                int slotBeginningOffset = gameVersion == GameVersion.Sept2018 ? 0x0 : 0x38;
+                int slotSize = gameVersion == GameVersion.Sept2018 ? 0x4 : 0x18;
                 for (int i = 0; i < count; i++)
                 {
-                    int tech = game.ReadValue<int>(slots + 0x20 + 0x18 + 0x18 * i);
-                    if (tech != 0)
+                    int tech = game.ReadValue<int>(slots + slotBeginningOffset + slotSize * i);
+                    if (tech > 0 && tech < 10005)
                     {
                         blueprints.Add((TechType)tech);
+                        //WriteDebug($"has {(TechType)tech}");
                     }
                 }
+                //DateTime end = DateTime.Now;
+                //TimeSpan time = end - start;
+                //WriteDebug($"took {time.Ticks / 1000000d}ms to read bps");
             }
+            //WriteDebug("end BPs");
             knownTechOld = knownTech;
             knownTech = blueprints;
         }
@@ -331,7 +348,11 @@ namespace SubnauticaAutosplitter
             {
                 if (ToothSplitSetting && !toothSplitTriggered)
                 {
-                    if (playerInventory.ContainsKey(TechType.StalkerTooth) && playerInventory[TechType.StalkerTooth] >= 4 && playerInventoryOld[TechType.StalkerTooth] < 4)
+                    if (playerInventory == null || playerInventoryOld == null) { WriteDebug("inv null"); }
+                    else if (playerInventory.ContainsKey(TechType.StalkerTooth) && 
+                        playerInventory[TechType.StalkerTooth] >= 4 && 
+                        playerInventoryOld.ContainsKey(TechType.StalkerTooth) && 
+                        playerInventoryOld[TechType.StalkerTooth] < 4)
                     {
                         toothSplitTriggered = true;
                         return true;
@@ -414,7 +435,7 @@ namespace SubnauticaAutosplitter
         // so the messages are more obvious
         private void WriteDebug(string message)
         {
-            Debug.WriteLine($"[Subnautica Splitter] {message}");
+            Debug.WriteLine($"[Subnautica Autosplitter] {message}");
         }
     }
     
