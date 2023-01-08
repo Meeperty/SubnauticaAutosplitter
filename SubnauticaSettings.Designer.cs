@@ -53,16 +53,18 @@ namespace SubnauticaAutosplitter
             this.MainPanel.Controls.Add(this.endSplitCheckBox);
             this.MainPanel.Controls.Add(this.startSplitCheckBox);
             this.MainPanel.Location = new System.Drawing.Point(0, 0);
+            this.MainPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MainPanel.Name = "MainPanel";
-            this.MainPanel.Size = new System.Drawing.Size(457, 563);
+            this.MainPanel.Size = new System.Drawing.Size(374, 469);
             this.MainPanel.TabIndex = 0;
             // 
             // sparseDeathCheckBox
             // 
             this.sparseDeathCheckBox.AutoSize = true;
-            this.sparseDeathCheckBox.Location = new System.Drawing.Point(3, 203);
+            this.sparseDeathCheckBox.Location = new System.Drawing.Point(2, 169);
+            this.sparseDeathCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.sparseDeathCheckBox.Name = "sparseDeathCheckBox";
-            this.sparseDeathCheckBox.Size = new System.Drawing.Size(263, 29);
+            this.sparseDeathCheckBox.Size = new System.Drawing.Size(219, 24);
             this.sparseDeathCheckBox.TabIndex = 7;
             this.sparseDeathCheckBox.Text = "Split on sparse deathwarp\r\n";
             this.sparseDeathCheckBox.UseVisualStyleBackColor = true;
@@ -70,9 +72,10 @@ namespace SubnauticaAutosplitter
             // ionSplitCheckBox
             // 
             this.ionSplitCheckBox.AutoSize = true;
-            this.ionSplitCheckBox.Location = new System.Drawing.Point(3, 168);
+            this.ionSplitCheckBox.Location = new System.Drawing.Point(2, 140);
+            this.ionSplitCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ionSplitCheckBox.Name = "ionSplitCheckBox";
-            this.ionSplitCheckBox.Size = new System.Drawing.Size(350, 29);
+            this.ionSplitCheckBox.Size = new System.Drawing.Size(292, 24);
             this.ionSplitCheckBox.TabIndex = 6;
             this.ionSplitCheckBox.Text = "Split on getting ion battery blueprints\r\n";
             this.ionSplitCheckBox.UseVisualStyleBackColor = true;
@@ -80,9 +83,10 @@ namespace SubnauticaAutosplitter
             // mountainSplitCheckBox
             // 
             this.mountainSplitCheckBox.AutoSize = true;
-            this.mountainSplitCheckBox.Location = new System.Drawing.Point(3, 108);
+            this.mountainSplitCheckBox.Location = new System.Drawing.Point(2, 90);
+            this.mountainSplitCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.mountainSplitCheckBox.Name = "mountainSplitCheckBox";
-            this.mountainSplitCheckBox.Size = new System.Drawing.Size(316, 54);
+            this.mountainSplitCheckBox.Size = new System.Drawing.Size(266, 44);
             this.mountainSplitCheckBox.TabIndex = 5;
             this.mountainSplitCheckBox.Text = "Split on entering Mountains\r\nfrom Kelp Forest for the first time\r\n";
             this.mountainSplitCheckBox.UseVisualStyleBackColor = true;
@@ -90,9 +94,10 @@ namespace SubnauticaAutosplitter
             // rocketSplitCheckBox
             // 
             this.rocketSplitCheckBox.AutoSize = true;
-            this.rocketSplitCheckBox.Location = new System.Drawing.Point(3, 73);
+            this.rocketSplitCheckBox.Location = new System.Drawing.Point(2, 61);
+            this.rocketSplitCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rocketSplitCheckBox.Name = "rocketSplitCheckBox";
-            this.rocketSplitCheckBox.Size = new System.Drawing.Size(303, 29);
+            this.rocketSplitCheckBox.Size = new System.Drawing.Size(254, 24);
             this.rocketSplitCheckBox.TabIndex = 4;
             this.rocketSplitCheckBox.Text = "Split on getting rocket blueprint\r\n";
             this.rocketSplitCheckBox.UseVisualStyleBackColor = true;
@@ -100,9 +105,10 @@ namespace SubnauticaAutosplitter
             // toothSplitChechBox
             // 
             this.toothSplitChechBox.AutoSize = true;
-            this.toothSplitChechBox.Location = new System.Drawing.Point(3, 38);
+            this.toothSplitChechBox.Location = new System.Drawing.Point(2, 32);
+            this.toothSplitChechBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.toothSplitChechBox.Name = "toothSplitChechBox";
-            this.toothSplitChechBox.Size = new System.Drawing.Size(427, 29);
+            this.toothSplitChechBox.Size = new System.Drawing.Size(360, 24);
             this.toothSplitChechBox.TabIndex = 3;
             this.toothSplitChechBox.Text = "Split on getting 4 stalker teeth for the first time\r\n";
             this.toothSplitChechBox.UseVisualStyleBackColor = true;
@@ -110,9 +116,10 @@ namespace SubnauticaAutosplitter
             // gunSplitcheckBox
             // 
             this.gunSplitcheckBox.AutoSize = true;
-            this.gunSplitcheckBox.Location = new System.Drawing.Point(3, 238);
+            this.gunSplitcheckBox.Location = new System.Drawing.Point(2, 198);
+            this.gunSplitcheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.gunSplitcheckBox.Name = "gunSplitcheckBox";
-            this.gunSplitcheckBox.Size = new System.Drawing.Size(259, 29);
+            this.gunSplitcheckBox.Size = new System.Drawing.Size(214, 24);
             this.gunSplitcheckBox.TabIndex = 2;
             this.gunSplitcheckBox.Text = "Split on QEP deactivation";
             this.gunSplitcheckBox.UseVisualStyleBackColor = true;
@@ -120,30 +127,33 @@ namespace SubnauticaAutosplitter
             // endSplitCheckBox
             // 
             this.endSplitCheckBox.AutoSize = true;
-            this.endSplitCheckBox.Location = new System.Drawing.Point(3, 273);
+            this.endSplitCheckBox.Location = new System.Drawing.Point(2, 228);
+            this.endSplitCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.endSplitCheckBox.Name = "endSplitCheckBox";
-            this.endSplitCheckBox.Size = new System.Drawing.Size(322, 29);
+            this.endSplitCheckBox.Size = new System.Drawing.Size(269, 44);
             this.endSplitCheckBox.TabIndex = 1;
-            this.endSplitCheckBox.Text = "Split when rocket cutscene starts";
+            this.endSplitCheckBox.Text = "Split when rocket cutscene starts\r\n\r\n";
             this.endSplitCheckBox.UseVisualStyleBackColor = true;
             // 
             // startSplitCheckBox
             // 
             this.startSplitCheckBox.AutoSize = true;
-            this.startSplitCheckBox.Location = new System.Drawing.Point(3, 3);
+            this.startSplitCheckBox.Location = new System.Drawing.Point(2, 2);
+            this.startSplitCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.startSplitCheckBox.Name = "startSplitCheckBox";
-            this.startSplitCheckBox.Size = new System.Drawing.Size(318, 29);
+            this.startSplitCheckBox.Size = new System.Drawing.Size(268, 24);
             this.startSplitCheckBox.TabIndex = 0;
             this.startSplitCheckBox.Text = "Start after skipping first cutscene\r\n";
             this.startSplitCheckBox.UseVisualStyleBackColor = true;
             // 
             // SubnauticaSettings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.MainPanel);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "SubnauticaSettings";
-            this.Size = new System.Drawing.Size(457, 563);
+            this.Size = new System.Drawing.Size(374, 469);
             this.MainPanel.ResumeLayout(false);
             this.MainPanel.PerformLayout();
             this.ResumeLayout(false);
