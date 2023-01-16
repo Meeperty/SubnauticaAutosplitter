@@ -126,26 +126,40 @@ namespace SubnauticaAutosplitter
             Debug.WriteLineIf(!pointersInitialized, $"[Subnautica Autosplitter] pointers not intialized");
             if (game != null && pointersInitialized)
             {
+                Stopwatch sw = Stopwatch.StartNew();
+
                 isIntroActiveWatcher.Update(game);
                 
                 launchStartedWatcher.Update(game);
+
+                if (MountainSplitSetting || SparseSplitSetting || GunSplitSetting)
+                {
+                    playerBiomePtr.Update(game);
+                    biomeStringOld = biomeString;
+                    biomeString = IntPtrToString(playerBiomePtr.Current + 0x14, 64).Trim(' ');
+                }
                 
-                playerBiomePtr.Update(game);
-                biomeStringOld = biomeString;
-                biomeString = IntPtrToString(playerBiomePtr.Current + 0x14, 64).Trim(' ');
-                
-                
-                playerCinematicActive.Update(game);
-                
-                //inventoryDictionaryPtr.Update(game);
-                //Task refreshInventory = new Task(GetInventory, null);
-                //refreshInventory.Start();
-                GetInventory(null);
-                
-                //knownTechPtr.Update(game);
-                //Task refreshKnownTech = new Task(GetBlueprints, null);
-                //refreshKnownTech.Start();
-                GetBlueprints(null);
+                if (GunSplitSetting)
+                    playerCinematicActive.Update(game);
+
+                if (ToothSplitSetting)
+                {
+                    //inventoryDictionaryPtr.Update(game);
+                    //Task refreshInventory = new Task(GetInventory, null);
+                    //refreshInventory.Start();
+                    GetInventory(null);
+                }
+
+                if (IonSplitSetting || RocketSplitSetting)
+                {
+                    //knownTechPtr.Update(game);
+                    //Task refreshKnownTech = new Task(GetBlueprints, null);
+                    //refreshKnownTech.Start();
+                    GetBlueprints(null);
+                }
+
+                sw.Stop();
+                WriteDebug($"Updating took {sw.Elapsed}");
             }
         }
 
