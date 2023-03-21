@@ -26,9 +26,11 @@ init
     {
         case 23801856:
             version = "September 2018";
+            Debug.WriteLine("Version is sept 2018");
             break;
         case 671744:
             version = "December 2021";
+            Debug.WriteLine("Version is dec 2021");
             break;
     }
 }
