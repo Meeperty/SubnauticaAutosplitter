@@ -175,6 +175,7 @@ namespace SubnauticaAutosplitter
                     WriteDebug("Game found");
                     GetGameVersion();
                     InitPointers();
+                    game.Exited += (object o, EventArgs e) => { game = null; };
                 }
             }
         }
