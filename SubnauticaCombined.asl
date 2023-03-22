@@ -18,27 +18,40 @@ state("Subnautica", "December 2021")
     string128 biomeString: "UnityPlayer.dll", 0x1690cd0, 0x8, 0x10, 0x30, 0x678, 0x58, 0x188, 0x1d8, 0x14;
 }
 
+state("Subnautica", "March 2023")
+{
+    //player is 
+    bool introCinematicActive: "mono-2.0-bdwgc.dll", 0x499c78, 0x9d0, 0x130, 0x48, 0x250, 0x220, 0x28, 0x87;
+}
+
 init
 {
     int firstModuleSize = modules.First().ModuleMemorySize;
-    Debug.WriteLine(firstModuleSize.ToString());
+    print(firstModuleSize.ToString());
     switch (firstModuleSize)
     {
         case 23801856:
             version = "September 2018";
-            Debug.WriteLine("Version is sept 2018");
+            print("Version is sept 2018");
             break;
         case 671744:
             version = "December 2021";
-            Debug.WriteLine("Version is dec 2021");
+            print("Version is dec 2021");
+            break;
+        case 675840:
+            version = "";
+            print("Version is mar 2023");
+            break;
+        default:
+            print("No valid version found");
             break;
     }
 }
 
 startup
 {
-    //settings.Add(id (string),Debug.WriteLine default_value (bool), description (string), parent (string))
-    settings.Add("start", true, "Split on start");
+    //settings.Add(id (string), default_value (bool), description (string), parent (string))
+    settings.Add("start", true, "Start after intro cutscene");
     settings.Add("end", true, "Split on rocket launch");
     settings.Add("gunDeactivate", false, "Split on gun deactivation");
 
@@ -48,7 +61,7 @@ split
 {
     if (!old.rocketLaunching && current.rocketLaunching && settings["end"]) { return true; }
 
-    if (!old.playerCinematicActive && current.playerCinematicActive && current.biomeString == "Precursor_Gun_ControlRoom" && settings["gunDeactivate"]) { return true; Debug.WriteLine("gun split"); }
+    if (!old.playerCinematicActive && current.playerCinematicActive && current.biomeString == "Precursor_Gun_ControlRoom" && settings["gunDeactivate"]) { return true; print("gun split"); }
 }
 
 start
@@ -59,8 +72,8 @@ start
 
 update
 {
-    //Debug.WriteLine(modules.First().ModuleMemorySize.ToString());
-    //Debug.WriteLine(modules.First().ToString());
-    //Debug.WriteLine(current.playerCinematicActive.ToString());
-    //Debug.WriteLine(current.biomeString);
+    //print(modules.First().ModuleMemorySize.ToString());
+    //print(modules.First().ToString());
+    //print(current.playerCinematicActive.ToString());
+    //print(current.biomeString);
 }
