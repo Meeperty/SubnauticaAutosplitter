@@ -1,10 +1,13 @@
+//also known as 2.0
 state("Subnautica", "March 2023")
 {
     //player is 
     //modules.First() length 675840
+    bool rocketLaunching: "mono-2.0-bdwgc.dll", 0x4a7458, 0x210, 0x2a8, 0x90, 0x190, 0x18, 0x8, 0x668;
     bool introCinematicActive: "mono-2.0-bdwgc.dll", 0x499c78, 0x9d0, 0x130, 0x48, 0x250, 0x220, 0x28, 0x87;
 }
 
+//also known as old patch
 state("Subnautica", "September 2018")
 {
     //player is "Subnautica.exe", 0x142b908, 0x180, 0x128, 0x80, 0x1d0, 0x8, 0x248, ...
@@ -15,6 +18,7 @@ state("Subnautica", "September 2018")
     string128 biomeString: "Subnautica.exe", 0x142b908, 0x180, 0x128, 0x80, 0x1d0, 0x8, 0x248, 0x1d0, 0x14;
 }
 
+//also known as legacy patch
 state("Subnautica", "December 2021")
 {
     //player is "UnityPlayer.dll", 0x1690cd0, 0x8, 0x10, 0x30, 0x678, 0x58, 0x188, ...
@@ -55,7 +59,6 @@ startup
     settings.Add("start", true, "Start after intro cutscene");
     settings.Add("end", true, "Split on rocket launch");
     settings.Add("gunDeactivate", false, "Split on gun deactivation");
-
 }
 
 split
