@@ -3,7 +3,9 @@ state("Subnautica", "March 2023")
 {
     //player is "mono-2.0-bdwgc.dll", 0x497dc8, 0x18, 0xde0, 0xf8, 0x30, 0x18, ...
     //modules.First() length 675840
-    bool rocketLaunching: "mono-2.0-bdwgc.dll", 0x4a7458, 0x210, 0x2a8, 0x90, 0x190, 0x18, 0x8, 0x668;
+    //this patch's rocketlaunching is actually StoryGoalScheduler.main.paused
+    //which only happens on rocket launch it seems (i hope im right)
+    bool rocketLaunching: "UnityPlayer.dll", 0x1847ed0, 0x110, 0xd0, 0xc0, 0x338, 0x3e0, 0x10, 0x20;
     bool introCinematicActive: "UnityPlayer.dll", 0x179b680, 0x88, 0x198, 0x338, 0x30, 0x28, 0x28, 0x87;
     bool playerCinematicActive : "mono-2.0-bdwgc.dll", 0x497dc8, 0x18, 0xde0, 0xf8, 0x30, 0x18, 0x284;
     //something -> MainCameraControl (0x30) -> PlayerController (0x18) -> Player (0x1f0) -> biomeString (0x14)
