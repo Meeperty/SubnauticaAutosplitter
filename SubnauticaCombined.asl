@@ -34,6 +34,12 @@ state("Subnautica", "December 2021")
     string128 biomeString: "UnityPlayer.dll", 0x1690cd0, 0x8, 0x10, 0x30, 0x678, 0x58, 0x188, 0x1d8, 0x14;
 }
 
+state("Subnautica", "March 2023")
+{
+    //player is 
+    bool introCinematicActive: "mono-2.0-bdwgc.dll", 0x499c78, 0x9d0, 0x130, 0x48, 0x250, 0x220, 0x28, 0x87;
+}
+
 init
 {
     int firstModuleSize = modules.First().ModuleMemorySize;
