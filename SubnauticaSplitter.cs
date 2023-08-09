@@ -108,7 +108,7 @@ namespace SubnauticaAutosplitter
             Debug.WriteLineIf(!pointersInitialized, $"[Subnautica Autosplitter] pointers not intialized");
             if (game != null && pointersInitialized)
             {
-                #if DEBUG
+                #if EXTRADBG
                 Stopwatch sw = Stopwatch.StartNew();
                 #endif
 
@@ -124,7 +124,9 @@ namespace SubnauticaAutosplitter
                 }
                 
                 if (GunSplitSetting)
+                {
                     playerCinematicActive.Update(game);
+                }
 
                 if (ToothSplitSetting)
                 {
@@ -142,7 +144,7 @@ namespace SubnauticaAutosplitter
                     GetBlueprints(null);
                 }
 
-                #if DEBUG
+                #if EXTRADBG
                 sw.Stop();
                 WriteDebug($"Updating took {sw.Elapsed}");
                 #endif

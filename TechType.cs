@@ -139,7 +139,7 @@
         UltraGlideFins = 805, // 0x00000325
         SwimChargeFins = 806, // 0x00000326
         RepulsionCannon = 807, // 0x00000327
-        Stillsuit = 808, // 0x00000328
+        WaterFiltrationSuit = 808, // 0x00000328
         PowerGlide = 809, // 0x00000329
         CompostCreepvine = 900, // 0x00000384
         ProcessUranium = 901, // 0x00000385
@@ -200,7 +200,7 @@
         AquariumBlueprint = 1053, // 0x0000041D
         ReinforcedDiveSuitBlueprint = 1054, // 0x0000041E
         RadiationSuitBlueprint = 1055, // 0x0000041F
-        StillsuitBlueprint = 1056, // 0x00000420
+        WaterFiltrationSuitBlueprint = 1056, // 0x00000420
         ScannerRoomBlueprint = 1057, // 0x00000421
         BasePlanterBlueprint = 1058, // 0x00000422
         PlanterPot2Blueprint = 1059, // 0x00000423
@@ -248,7 +248,7 @@
         AquariumFragment = 1138, // 0x00000472
         ReinforcedDiveSuitFragment = 1139, // 0x00000473
         RadiationSuitFragment = 1140, // 0x00000474
-        StillsuitFragment = 1141, // 0x00000475
+        WaterFiltrationSuitFragment = 1141, // 0x00000475
         BuilderFragment = 1142, // 0x00000476
         LEDLightFragment = 1143, // 0x00000477
         TechlightFragment = 1144, // 0x00000478
@@ -259,6 +259,9 @@
         LaserCutterFragment = 1149, // 0x0000047D
         BeaconFragment = 1150, // 0x0000047E
         GravSphereFragment = 1151, // 0x0000047F
+        BaseLargeRoomFragment = 1162, // 0x0000048A
+        BaseLargeGlassDomeFragment = 1163, // 0x0000048B
+        BaseGlassDomeFragment = 1164, // 0x0000048C
         SafeShallowsEgg = 1250, // 0x000004E2
         KelpForestEgg = 1251, // 0x000004E3
         GrassyPlateausEgg = 1252, // 0x000004E4
@@ -700,7 +703,7 @@
         CookedHoopfish = 4512, // 0x000011A0
         NutrientBlock = 4513, // 0x000011A1
         FirstAidKit = 4514, // 0x000011A2
-        StillsuitWater = 4515, // 0x000011A3
+        WaterFiltrationSuitWater = 4515, // 0x000011A3
         BigFilteredWater = 4516, // 0x000011A4
         CookedSpinefish = 4517, // 0x000011A5
         CookedLavaEyeye = 4518, // 0x000011A6
@@ -756,6 +759,18 @@
         BaseBioReactor = 5528, // 0x00001598
         BaseNuclearReactor = 5529, // 0x00001599
         BasePipeConnector = 5530, // 0x0000159A
+        BaseRechargePlatform = 5531, // 0x0000159B
+        BaseControlRoom = 5532, // 0x0000159C
+        BaseWallFoundation = 5533, // 0x0000159D
+        BaseLargeRoom = 5534, // 0x0000159E
+        OldBasePartitionI = 5535, // 0x0000159F
+        OldBasePartitionL = 5536, // 0x000015A0
+        OldBasePartitionT = 5537, // 0x000015A1
+        OldBasePartitionX = 5538, // 0x000015A2
+        BasePartitionDoor = 5539, // 0x000015A3
+        BaseGlassDome = 5540, // 0x000015A4
+        BasePartition = 5541, // 0x000015A5
+        BaseLargeGlassDome = 5542, // 0x000015A6
         RocketBase = 5900, // 0x0000170C
         RocketBaseLadder = 5901, // 0x0000170D
         RocketStage1 = 5902, // 0x0000170E
