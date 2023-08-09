@@ -26,25 +26,8 @@ namespace SubnauticaAutosplitter
         {
             this.settings = _settings;
         }
-        internal void DebugWrites(object o)
-        {
-            //try
-            //{
-            //    WriteDebug("start inv");
-            //    List<string> tech = knownTech.ConvertAll<string>(x => x.ToString());
-            //    tech.Sort();
-            //    foreach (var t in knownTech)
-            //    {
-            //        WriteDebug(t.ToString());
-            //    }
-            //}
-            //catch (NullReferenceException)
-            //{
 
-            //}
-        }
-
-        internal bool StartSplitSetting
+		internal bool StartSplitSetting
         {
             get
             {
@@ -121,12 +104,13 @@ namespace SubnauticaAutosplitter
 
         public void Update()
         {
-            //Debug.WriteLine("Update");
             Debug.WriteLineIf(game == null, $"[Subnautica Autosplitter] game null");
             Debug.WriteLineIf(!pointersInitialized, $"[Subnautica Autosplitter] pointers not intialized");
             if (game != null && pointersInitialized)
             {
+                #if DEBUG
                 Stopwatch sw = Stopwatch.StartNew();
+                #endif
 
                 isIntroActiveWatcher.Update(game);
                 
@@ -158,8 +142,10 @@ namespace SubnauticaAutosplitter
                     GetBlueprints(null);
                 }
 
+                #if DEBUG
                 sw.Stop();
                 WriteDebug($"Updating took {sw.Elapsed}");
+                #endif
             }
         }
 
@@ -301,6 +287,11 @@ namespace SubnauticaAutosplitter
                 inventoryDictionaryPtr.Update(game);
                 IntPtr startAddr = inventoryDictionaryPtr.Current;
                 
+                #if EXTRADBG
+                DateTime start = DateTime.Now;
+                WriteDebug("Getting inv from " + startAddr.ToString("X"));
+                #endif
+
                 int size = game.ReadValue<int>(startAddr + 0x18);
                 int startOffset = gameVersion == GameVersion.CurrentPatch ? 0x30 : 0x20;
                 int itemOffset = gameVersion == GameVersion.CurrentPatch ? 0x18 : 0x8;
@@ -315,18 +306,26 @@ namespace SubnauticaAutosplitter
                         IntPtr list = game.ReadPointer(itemGroup + 0x10);
                         int itemCount = game.ReadValue<int>(list + 0x18);
                         inv.Add(itemType, itemCount);
+
+                        #if EXTRADBG
+                        WriteDebug($"Inv contains: {itemCount} {itemType}");
+                        #endif
                     }
                 }
+                #if EXTRADBG
+                DateTime end = DateTime.Now;
+                TimeSpan time = end - start;
+                WriteDebug($"inv read took {time.Ticks / 1000000d}ms");
+                WriteDebug("end inv");
+                #endif
             }
             else
             {
                 WriteDebug("Game null in GetInventory");
             }
             Thread.Sleep(10);
-            //WriteDebug("end inv");
             playerInventoryOld = playerInventory;
             playerInventory = inv;
-            //return inv;
         }
 
         public void GetBlueprints(object o)
@@ -334,10 +333,12 @@ namespace SubnauticaAutosplitter
             List<TechType> blueprints = new List<TechType>();
             if (game != null)
             {
-                //DateTime start = DateTime.Now;
                 knownTechPtr.Update(game);
-                //WriteDebug("Getting bps from " + knownTechPtr.Current.ToString("X"));
                 IntPtr startAddr = knownTechPtr.Current;
+#if EXTRADBG
+                DateTime start = DateTime.Now;
+                WriteDebug("Getting bps from " + startAddr.ToString("X"));
+#endif
 
                 int slotsOffset = gameVersion == GameVersion.Sept2018 ? 0x20 : 0x18;
                 IntPtr slots = game.ReadPointer(startAddr + slotsOffset);
@@ -353,15 +354,22 @@ namespace SubnauticaAutosplitter
                     {
                         TechType type = (TechType)tech;
                         blueprints.Add(type);
-                        //WriteDebug($"has {type}");
+#if EXTRADBG
+                        WriteDebug($"knows: {type}");
+#endif
                     }
                 }
-                //DateTime end = DateTime.Now;
-                //TimeSpan time = end - start;
-                //WriteDebug($"took {time.Ticks / 1000000d}ms to read bps");
+#if EXTRADBG
+                DateTime end = DateTime.Now;
+                TimeSpan time = end - start;
+                WriteDebug($"bp read took {time.Ticks / 1000000d}ms");
+                WriteDebug("end BPs");
+#endif
             }
-            //WriteDebug("end BPs");
-
+            else
+            {
+                WriteDebug("Game null in GetBlueprints");
+            }
             knownTechOld = knownTech;
             knownTech = blueprints;
         }
@@ -434,14 +442,9 @@ namespace SubnauticaAutosplitter
             if (game == null)
             {
                 GetGameProcess();
-                if (game != null)
-                {
-                    WriteDebug("Starting timers");
-                    debugWriteTimer = new Timer(DebugWrites, null, 0, 500);
-                }
                 return false;
             }
-            if (StartSplitSetting && game != null)
+            else if (StartSplitSetting)
             {
                 if (isIntroActiveWatcher.Current == false && isIntroActiveWatcher.Old == true)
                     return true;
