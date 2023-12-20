@@ -59,5 +59,17 @@ namespace SubnauticaAutosplitter
             get => sparseDeathCheckBox.Checked;
             set => sparseDeathCheckBox.Checked = value;
         }
-    }
+
+        internal bool UnstuckPause
+        {
+            get => unstuckPauseCheckBox.Checked;
+            set => unstuckPauseCheckBox.Checked = value;
+        }
+
+        //internal bool {Name}
+        //{
+        //    get => {name}CheckBox.Checked;
+        //    set => {name}CheckBox.Checked = value;
+        //}
+	}
 }

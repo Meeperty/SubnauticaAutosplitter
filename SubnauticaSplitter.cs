@@ -11,6 +11,19 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+// Steps to add a new pointer:
+//  Add a MemoryWatcher
+//  Add a DeepPointer to InitPointers()
+//   and initialize the pointers for various versions
+//  Intialize the MemoryWatcher (still in InitPointers())
+//  Add a watcher.Update() call to Update()
+
+// Steps to add a new split/other logic element:
+//  Add a CheckBox and property to SubnauticaSettings
+//  Add an XML getter and setter to SubnauticaComponent in Get/SetSettings()
+//  Add a property to SubnauticaSplitter
+//  Add necessary logic to ShouldSplit/ShouldReset/whatever
+
 namespace SubnauticaAutosplitter
 {
     public class SubnauticaSplitter : IAutoSplitter
@@ -21,11 +34,12 @@ namespace SubnauticaAutosplitter
 
         public bool pointersInitialized;
 
-        private SubnauticaSettings settings;
+		private SubnauticaSettings settings;
         internal SubnauticaSplitter(SubnauticaSettings _settings)
         {
             this.settings = _settings;
         }
+		#region Settings
 
 		internal bool StartSplitSetting
         {
@@ -101,8 +115,27 @@ namespace SubnauticaAutosplitter
                 return false;
             }
         }
+        internal bool UnstuckPauseSetting
+        {
+            get
+            {
+                if (settings != null)
+                    return settings.UnstuckPause;
+                return false;
+            }
+        }
+		//internal bool {Name}Setting
+		//{
+		//    get
+		//    {
+		//        if (settings != null)
+		//            return settings.{Name};
+		//        return false;
+		//    }
+		//}
+		#endregion
 
-        public void Update()
+		public void Update()
         {
             Debug.WriteLineIf(game == null, $"[Subnautica Autosplitter] game null");
             Debug.WriteLineIf(!pointersInitialized, $"[Subnautica Autosplitter] pointers not intialized");
@@ -144,6 +177,11 @@ namespace SubnauticaAutosplitter
                     GetBlueprints(null);
                 }
 
+                if (UnstuckPauseSetting)
+                {
+					respawnSceneActiveFloat.Update(game);
+				}
+
                 #if EXTRADBG
                 sw.Stop();
                 WriteDebug($"Updating took {sw.Elapsed}");
@@ -173,6 +211,8 @@ namespace SubnauticaAutosplitter
         public static MemoryWatcher<bool> launchStartedWatcher = new MemoryWatcher<bool>(IntPtr.Zero);
 
         public static MemoryWatcher<bool> playerCinematicActive = new MemoryWatcher<bool>(IntPtr.Zero);
+
+        public static MemoryWatcher<float> respawnSceneActiveFloat = new MemoryWatcher<float>(IntPtr.Zero);
 
         // pointer to the beginning of the string
         public static MemoryWatcher<IntPtr> playerBiomePtr = new MemoryWatcher<IntPtr>(IntPtr.Zero);
@@ -223,6 +263,8 @@ namespace SubnauticaAutosplitter
             DeepPointer playerCinematicPtr;
             DeepPointer inventoryPtr;
             DeepPointer blueprintsPtr;
+            //uGUI.main.uGUI_SceneRespawning.loadingBackground.sequence.dir
+            DeepPointer respawnSceneActivePtr;
             switch (gameVersion)
             {
                 case GameVersion.Sept2018:
@@ -232,6 +274,7 @@ namespace SubnauticaAutosplitter
                     playerCinematicPtr = new DeepPointer("Subnautica.exe", 0x142b908, 0x180, 0x128, 0x80, 0x1d0, 0x8, 0x248, 0x240);
                     inventoryPtr = new DeepPointer("mono.dll", 0x00296bc8, 0x20, 0xa40, 0x0, 0x40, 0x58, 0x28);
                     blueprintsPtr = new DeepPointer("Subnautica.exe", 0x142b5e8, 0x2A8, 0x58, 0x30, 0xF8, 0x8, 0x18, 0x158);
+                    respawnSceneActivePtr = new DeepPointer(0); //because this patch doesn't have unstuck
                     break;
 
                 case GameVersion.Dec2021:
@@ -241,6 +284,7 @@ namespace SubnauticaAutosplitter
                     playerCinematicPtr = new DeepPointer("UnityPlayer.dll", 0x1690cd0, 0x8, 0x10, 0x30, 0x678, 0x58, 0x188, 0x248);
                     inventoryPtr = new DeepPointer("UnityPlayer.dll", 0x1691ce0, 0x8, 0x4f8, 0x160, 0x188, 0x40, 0x58, 0x18);
                     blueprintsPtr = new DeepPointer("mono-2.0-bdwgc.dll", 0x492DC8, 0x38, 0x230, 0x3F0, 0xE0, 0x770, 0x150, 0x1A8);
+                    respawnSceneActivePtr = new DeepPointer(0); //because this patch doesn't have unstuck
                     break;
 
                 default/* GameVersion.Mar2023*/:
@@ -251,6 +295,8 @@ namespace SubnauticaAutosplitter
                     playerCinematicPtr = new DeepPointer("UnityPlayer.dll",  0x17cfbe0, 0xbb0, 0xd0, 0x8, 0xd0, 0x774, 0x0, 0x284);
                     inventoryPtr = new DeepPointer(0);
                     blueprintsPtr = new DeepPointer(0);
+                    //uGUI.main (from Awake()), 0x38, 0x20, 0x20, 0x24, for Mar2023 patch
+                    respawnSceneActivePtr = new DeepPointer("UnityPlayer.dll", 0x17ced58, 0xd0, 0x8, 0x1e8, 0x150, 0x38, 0x20, 0x20, 0x24);
                     break;
             }
             isIntroActiveWatcher = new MemoryWatcher<bool>(introPtr);
@@ -259,6 +305,7 @@ namespace SubnauticaAutosplitter
             playerCinematicActive = new MemoryWatcher<bool>(playerCinematicPtr);
             inventoryDictionaryPtr = new MemoryWatcher<IntPtr>(inventoryPtr);
             knownTechPtr = new MemoryWatcher<IntPtr>(blueprintsPtr);
+            respawnSceneActiveFloat = new MemoryWatcher<float>(respawnSceneActivePtr);
             WriteDebug("Pointers initialized");
             pointersInitialized = true;
         }
@@ -476,7 +523,14 @@ namespace SubnauticaAutosplitter
             WriteDebug("OnReset");
         }
         
-        public bool IsGameTimePaused(LiveSplitState state) { return false; }
+        public bool IsGameTimePaused(LiveSplitState state) 
+        {
+            if (!UnstuckPauseSetting) return false;
+            bool respawnSceneActive = respawnSceneActiveFloat.Current == 1f;
+            //WriteDebug($"unstuck pause test returning {respawnSceneActive && playerCinematicActive.Current}");
+            return respawnSceneActive && playerCinematicActive.Current;
+        }
+
         public TimeSpan? GetGameTime(LiveSplitState state) { return null; }
 
         #endregion Logic

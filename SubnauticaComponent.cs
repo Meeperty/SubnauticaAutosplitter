@@ -70,6 +70,14 @@ namespace SubnauticaAutosplitter
             sparseSplit_node.InnerText = settings.SparseSplit.ToString();
             settings_Node.AppendChild(sparseSplit_node);
 
+            XmlElement unstuckPause_node = document.CreateElement("unstuckPause");
+            unstuckPause_node.InnerText = settings.UnstuckPause.ToString();
+            settings_Node.AppendChild(unstuckPause_node);
+
+            //XmlElement {name}_node = document.CreateElement("{name}");
+            //{name}_node.InnerText = settings.{Name}.ToString();
+            //settings_Node.AppendChild({name}_node);
+
             return settings_Node;
         }
 
@@ -115,6 +123,16 @@ namespace SubnauticaAutosplitter
                 settings.SparseSplit = val8;
                 WriteDebug($"sparseSplit set to {val8}");
             }
+            if (bool.TryParse(node["unstuckPause"]?.InnerText, out bool val9))
+            {
+				settings.UnstuckPause = val9;
+				WriteDebug($"unstuckPause set to {val9}");
+			}
+            //if (bool.TryParse(node["{name}"]?.InnerText, out bool val10))
+			//{
+			//    settings.{Name} = val10;
+			//    WriteDebug($"{name} set to {val10}");
+			//}
         }
 
         public override Control GetSettingsControl(LayoutMode mode)
