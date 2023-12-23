@@ -261,6 +261,7 @@ namespace SubnauticaAutosplitter
             DeepPointer launchPtr;
             DeepPointer biomePtr;
             DeepPointer playerCinematicPtr;
+            //Inventory.main._container._items.entries
             DeepPointer inventoryPtr;
             DeepPointer blueprintsPtr;
             //uGUI.main.uGUI_SceneRespawning.loadingBackground.sequence.dir
@@ -288,14 +289,15 @@ namespace SubnauticaAutosplitter
                     break;
 
                 default/* GameVersion.Mar2023*/:
-                    introPtr = new DeepPointer(0);
+                    introPtr = new DeepPointer("mono-2.0-bdwgc.dll", 0x499c78, 0x9d0, 0x130, 0x48, 0x250, 0x220, 0x28, 0x87);
                     launchPtr = new DeepPointer(0);
-                    biomePtr = new DeepPointer(0);
+                    biomePtr = new DeepPointer("UnityPlayer.dll",  0x17cfbe0, 0xbb0, 0xd0, 0x8, 0xd0, 0x774, 0x0, 0x1f0);
                     //Player.main, 0x284
                     playerCinematicPtr = new DeepPointer("UnityPlayer.dll",  0x17cfbe0, 0xbb0, 0xd0, 0x8, 0xd0, 0x774, 0x0, 0x284);
-                    inventoryPtr = new DeepPointer(0);
+                    //Inventory.main (from Get()), 0x38, 0x58, 0x18
+                    inventoryPtr = new DeepPointer("UnityPlayer.dll", 0x17fbe70, 0x8, 0x10, 0x30, 0x678, 0x1b8, 0x28, 0x38, 0x58, 0x18);
                     blueprintsPtr = new DeepPointer(0);
-                    //uGUI.main (from Awake()), 0x38, 0x20, 0x20, 0x24, for Mar2023 patch
+                    //uGUI.main (from Awake()), 0x38, 0x20, 0x20, 0x24
                     respawnSceneActivePtr = new DeepPointer("UnityPlayer.dll", 0x17ced58, 0xd0, 0x8, 0x1e8, 0x150, 0x38, 0x20, 0x20, 0x24);
                     break;
             }
@@ -357,8 +359,20 @@ namespace SubnauticaAutosplitter
                 #endif
 
                 int size = game.ReadValue<int>(startAddr + 0x18);
-                int startOffset = gameVersion == GameVersion.Dec2021 ? 0x30 : 0x20;
-                int itemOffset = gameVersion == GameVersion.Dec2021 ? 0x18 : 0x8;
+                //int startOffset = gameVersion == GameVersion.Dec2021 ? 0x30 : 0x20;
+                //int itemOffset = gameVersion == GameVersion.Dec2021 ? 0x18 : 0x8;
+                //for Dec2021 & Mar2023 patches, the items start at 0x30 after the ptr
+                //                               and each take up 0x18.
+                //for Sept2018 patch, the items start at 0x20 after the ptr
+                // 					 and each take up 0x8.
+                int startOffset = 0x30;
+                int itemOffset = 0x18;
+                if (gameVersion == GameVersion.Sept2018)
+                {
+					startOffset = 0x20;
+					itemOffset = 0x8;
+				}
+
                 for (int i = 0; i < size; i++)
                 {
                     IntPtr itemGroup = game.ReadPointer(startAddr + startOffset + (itemOffset * i));
