@@ -366,13 +366,8 @@ namespace SubnauticaAutosplitter
                 //                               and each take up 0x18.
                 //for Sept2018 patch, the items start at 0x20 after the ptr
                 // 					 and each take up 0x8.
-                int startOffset = 0x30;
-                int itemOffset = 0x18;
-                if (gameVersion == GameVersion.Sept2018)
-                {
-					startOffset = 0x20;
-					itemOffset = 0x8;
-				}
+                int startOffset = gameVersion == GameVersion.Sept2018 ? 0x20 : 0x30;
+                int itemOffset = gameVersion == GameVersion.Sept2018 ? 0x8 : 0x18;
 
                 for (int i = 0; i < size; i++)
                 {
