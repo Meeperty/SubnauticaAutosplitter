@@ -471,41 +471,58 @@ namespace SubnauticaAutosplitter
                         playerInventoryOld[TechType.StalkerTooth] < 4)
                     {
                         toothSplitTriggered = true;
+                        WriteDebug($"Tooth split");
                         return true;
                     }
                 }
                 if (RocketSplitSetting)
                 {
                     if (knownTech.Contains(TechType.RocketBase) && !knownTechOld.Contains(TechType.RocketBase))
-                        return true;
+                    { 
+                        WriteDebug($"Rocket blueprint split");
+						return true;
+                    }
                 }
                 if (MountainSplitSetting)
                 {
                     if (biomeString == "mountains" && biomeStringOld == "kelpForest" && !mountainSplitTriggered)
                     {
                         mountainSplitTriggered = true;
+                        WriteDebug($"Mountain enter split");
                         return true;
                     }
                 }
                 if (IonSplitSetting)
                 {
                     if (knownTech.Contains(TechType.PrecursorIonBattery) && !knownTechOld.Contains(TechType.PrecursorIonBattery))
+                    { 
+                        WriteDebug($"Ion battery blueprint split");
                         return true;
+                    }
                 }
                 if (SparseSplitSetting)
                 {
                     if ((biomeString == "Lifepod" || biomeString == "safeShallows") && biomeStringOld == "seaTreaderPath")
-                        return true;
+                    { 
+                        WriteDebug($"Sparse reef deathwarp split");
+						return true;
+                    }
                 }
                 if (GunSplitSetting)
                 {
                     if (playerCinematicActive.Current == true && playerCinematicActive.Old == false && biomeString == "Precursor_Gun_ControlRoom")
+                    { 
+                        WriteDebug($"Gun deactivation split");
                         return true;
+                    }
                 }
                 if (EndSplitSetting)
                 {
                     if (launchStartedWatcher.Current == true && launchStartedWatcher.Old == false)
-                        return true;
+                    {
+                        WriteDebug($"Launch split");
+						return true;
+                    }
                 }
             }
             return false;
