@@ -296,7 +296,8 @@ namespace SubnauticaAutosplitter
                     playerCinematicPtr = new DeepPointer("UnityPlayer.dll",  0x17cfbe0, 0xbb0, 0xd0, 0x8, 0xd0, 0x774, 0x0, 0x284);
                     //Inventory.main (from Get()), 0x38, 0x58, 0x18
                     inventoryPtr = new DeepPointer("UnityPlayer.dll", 0x17fbe70, 0x8, 0x10, 0x30, 0x678, 0x1b8, 0x28, 0x38, 0x58, 0x18);
-                    blueprintsPtr = new DeepPointer(0);
+                    //KnownTech.knownTech (from Initialize())
+                    blueprintsPtr = new DeepPointer("UnityPlayer.dll", 0x179b780, 0x0, 0x20, 0x18, 0x198, 0x2b0, 0x1c0, 0xbb8);
                     //uGUI.main (from Awake()), 0x38, 0x20, 0x20, 0x24
                     respawnSceneActivePtr = new DeepPointer("UnityPlayer.dll", 0x17ced58, 0xd0, 0x8, 0x1e8, 0x150, 0x38, 0x20, 0x20, 0x24);
                     break;
@@ -423,8 +424,8 @@ namespace SubnauticaAutosplitter
                 int countOffset = gameVersion == GameVersion.Sept2018 ? 0x40 : 0x30;
                 int count = game.ReadValue<int>(startAddr + countOffset);
 
-                int slotBeginningOffset = gameVersion == GameVersion.Sept2018 ? 0x0 : 0x38;
-                int slotSize = gameVersion == GameVersion.Sept2018 ? 0x4 : 0x18;
+                int slotBeginningOffset = gameVersion == GameVersion.Sept2018 ? 0x0 : 0x20;
+                int slotSize = gameVersion == GameVersion.Sept2018 ? 0x4 : 0xC;
                 for (int i = 0; i < count; i++)
                 {
                     int tech = game.ReadValue<int>(slots + slotBeginningOffset + slotSize * i);
