@@ -1,6 +1,6 @@
 ﻿namespace SubnauticaAutosplitter
 {
-    public enum TechType
+    internal enum TechType
     {
         None = 0,
         Quartz = 1,

@@ -28,11 +28,11 @@ namespace SubnauticaAutosplitter
 {
     public class SubnauticaSplitter : IAutoSplitter
     {
-        public Process game;
-        public Timer debugWriteTimer;
-        GameVersion gameVersion;
+        private Process game;
+        private Timer debugWriteTimer;
+        private GameVersion gameVersion;
 
-        public bool pointersInitialized;
+        private bool pointersInitialized;
 
 		private SubnauticaSettings settings;
         internal SubnauticaSplitter(SubnauticaSettings _settings)
@@ -77,7 +77,7 @@ namespace SubnauticaAutosplitter
                 return false;
             }
         }
-        internal bool toothSplitTriggered = false;
+        private bool toothSplitTriggered = false;
         internal bool RocketSplitSetting
         {
             get
@@ -96,7 +96,7 @@ namespace SubnauticaAutosplitter
                 return false;
             }
         }
-        internal bool mountainSplitTriggered = false;
+        private bool mountainSplitTriggered = false;
         internal bool IonSplitSetting
         {
             get
@@ -190,7 +190,7 @@ namespace SubnauticaAutosplitter
         }
 
         #region Memory & Such
-        public void GetGameProcess()
+        private void GetGameProcess()
         {
             if (game == null)
             {
@@ -206,28 +206,28 @@ namespace SubnauticaAutosplitter
             }
         }
 
-        public static MemoryWatcher<bool> isIntroActiveWatcher = new MemoryWatcher<bool>(IntPtr.Zero);
+        private MemoryWatcher<bool> isIntroActiveWatcher = new MemoryWatcher<bool>(IntPtr.Zero);
 
-        public static MemoryWatcher<bool> launchStartedWatcher = new MemoryWatcher<bool>(IntPtr.Zero);
+        private MemoryWatcher<bool> launchStartedWatcher = new MemoryWatcher<bool>(IntPtr.Zero);
 
-        public static MemoryWatcher<bool> playerCinematicActive = new MemoryWatcher<bool>(IntPtr.Zero);
+        private MemoryWatcher<bool> playerCinematicActive = new MemoryWatcher<bool>(IntPtr.Zero);
 
-        public static MemoryWatcher<float> respawnSceneActiveFloat = new MemoryWatcher<float>(IntPtr.Zero);
+        private MemoryWatcher<float> respawnSceneActiveFloat = new MemoryWatcher<float>(IntPtr.Zero);
 
         // pointer to the beginning of the string
-        public static MemoryWatcher<IntPtr> playerBiomePtr = new MemoryWatcher<IntPtr>(IntPtr.Zero);
-        public static string biomeString;
-        public static string biomeStringOld;
+        private MemoryWatcher<IntPtr> playerBiomePtr = new MemoryWatcher<IntPtr>(IntPtr.Zero);
+        private string biomeString;
+        private string biomeStringOld;
 
-        public static MemoryWatcher<IntPtr> inventoryDictionaryPtr = new MemoryWatcher<IntPtr>(IntPtr.Zero);
-        public static Dictionary<TechType, int> playerInventory;
-        public static Dictionary<TechType, int> playerInventoryOld;
+        private MemoryWatcher<IntPtr> inventoryDictionaryPtr = new MemoryWatcher<IntPtr>(IntPtr.Zero);
+        private Dictionary<TechType, int> playerInventory;
+        private Dictionary<TechType, int> playerInventoryOld;
 
-        public static MemoryWatcher<IntPtr> knownTechPtr = new MemoryWatcher<IntPtr>(IntPtr.Zero);
-        public static List<TechType> knownTech;
-        public static List<TechType> knownTechOld;
+        private MemoryWatcher<IntPtr> knownTechPtr = new MemoryWatcher<IntPtr>(IntPtr.Zero);
+        private List<TechType> knownTech;
+        private List<TechType> knownTechOld;
 
-        public void GetGameVersion()
+        private void GetGameVersion()
         {
             ProcessModule firstModule = game.Modules.Cast<ProcessModule>().FirstOrDefault();
             int moduleLen = firstModule.ModuleMemorySize;
@@ -255,7 +255,7 @@ namespace SubnauticaAutosplitter
             }
         }
 
-        public void InitPointers()
+        private void InitPointers()
         {
             DeepPointer introPtr;
             DeepPointer launchPtr;
@@ -315,7 +315,7 @@ namespace SubnauticaAutosplitter
 
         #region Mem utils
 
-        public string IntPtrToString(IntPtr ptr, int maxLen)
+        private string IntPtrToString(IntPtr ptr, int maxLen)
         {
             StringBuilder strBuilder = new StringBuilder();
             if (game != null)
@@ -346,7 +346,7 @@ namespace SubnauticaAutosplitter
             return strBuilder.ToString();
         }
 
-        public void GetInventory(object o)
+        private void GetInventory(object o)
         {
             Dictionary<TechType, int> inv = new Dictionary<TechType, int>();
             if (game != null)
@@ -360,8 +360,6 @@ namespace SubnauticaAutosplitter
                 #endif
 
                 int size = game.ReadValue<int>(startAddr + 0x18);
-                //int startOffset = gameVersion == GameVersion.Dec2021 ? 0x30 : 0x20;
-                //int itemOffset = gameVersion == GameVersion.Dec2021 ? 0x18 : 0x8;
                 //for Dec2021 & Mar2023 patches, the items start at 0x30 after the ptr
                 //                               and each take up 0x18.
                 //for Sept2018 patch, the items start at 0x20 after the ptr
@@ -402,7 +400,7 @@ namespace SubnauticaAutosplitter
             playerInventory = inv;
         }
 
-        public void GetBlueprints(object o)
+        private void GetBlueprints(object o)
         {
             List<TechType> blueprints = new List<TechType>();
             if (game != null)
@@ -568,12 +566,12 @@ namespace SubnauticaAutosplitter
             Debug.WriteLine($"[Subnautica Autosplitter] {message}");
 #endif
         }
-    }
-    
-    internal enum GameVersion
-    {
-        Dec2021,
-        Sept2018,
-        Mar2023
+
+        private enum GameVersion
+        {
+            Dec2021,
+            Sept2018,
+            Mar2023
+        }
     }
 }
